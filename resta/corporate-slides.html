@@ -698,6 +698,9 @@
       <input type="email" class="auth-input" id="auth-email" placeholder="メールアドレスを入力">
       <button class="auth-btn" id="auth-submit" onclick="checkAuth()">ログイン</button>
       <div class="auth-msg" id="auth-msg"></div>
+      <div style="margin-top: 16px;">
+        <a href="#" onclick="showRequestForm(); return false;" style="color: var(--text-muted); font-size: 13px; text-decoration: underline;">閲覧リクエストはこちら</a>
+      </div>
     </div>
 
     <!-- Step 2: Request form (shown when email not found) -->
@@ -1159,6 +1162,11 @@
   // セッション内は再認証不要
   if (sessionStorage.getItem('resta_auth')) {
     showSlides();
+  }
+
+  function showRequestForm() {
+    document.getElementById('auth-step-request').style.display = 'block';
+    document.getElementById('req-email').disabled = false;
   }
 
   // Enter key でログイン
