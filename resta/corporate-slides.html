@@ -8,6 +8,7 @@
   :root {
     --bg: #0a0a0a;
     --surface: #111111;
+    --surface2: #161616;
     --border: rgba(255,255,255,0.08);
     --text: #f5f5f5;
     --text-muted: rgba(245,245,245,0.5);
@@ -15,6 +16,8 @@
     --accent-light: #12a0a0;
     --orange: #E07B54;
     --orange-light: #f59a79;
+    --purple: #8c64dc;
+    --purple-light: #b89eff;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -28,11 +31,7 @@
     width: 100vw;
   }
 
-  .slides-wrapper {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-  }
+  .slides-wrapper { width: 100vw; height: 100vh; position: relative; }
 
   .slide {
     position: absolute;
@@ -41,73 +40,67 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: clamp(40px, 6vw, 80px);
+    padding: clamp(36px, 5vw, 72px);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.5s ease;
   }
 
-  .slide.active {
-    opacity: 1;
-    pointer-events: all;
-  }
+  .slide.active { opacity: 1; pointer-events: all; }
 
   /* ── Title ── */
   .slide-title { text-align: center; }
 
   .slide-title .eyebrow {
-    font-size: clamp(11px, 1.2vw, 14px);
+    font-size: clamp(12px, 1.3vw, 16px);
     letter-spacing: 0.2em;
     color: var(--text-muted);
-    margin-bottom: 28px;
+    margin-bottom: 32px;
   }
 
   .slide-title h1 {
-    font-size: clamp(48px, 6vw, 88px);
+    font-size: clamp(60px, 8vw, 120px);
     font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.15;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
     background: linear-gradient(135deg, var(--accent-light), #3dd6d6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 24px;
+    margin-bottom: 28px;
   }
 
   .slide-title .tagline {
-    font-size: clamp(14px, 1.6vw, 20px);
+    font-size: clamp(16px, 2vw, 24px);
     color: var(--text-muted);
     line-height: 1.8;
-    max-width: 640px;
-    margin: 0 auto 48px;
+    max-width: 700px;
+    margin: 0 auto 52px;
   }
 
   .slide-title .meta {
-    font-size: 13px;
+    font-size: 14px;
     color: rgba(255,255,255,0.25);
     letter-spacing: 0.08em;
   }
 
   /* ── Content base ── */
-  .slide-content {
-    width: 100%;
-    max-width: 1000px;
-  }
+  .slide-content { width: 100%; max-width: 1100px; }
 
   .slide-label {
-    font-size: clamp(10px, 1vw, 12px);
+    font-size: clamp(11px, 1.1vw, 14px);
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--accent-light);
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
 
   .slide-heading {
-    font-size: clamp(26px, 3.2vw, 48px);
+    font-size: clamp(30px, 3.8vw, 56px);
     font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 1.3;
-    margin-bottom: 40px;
+    margin-bottom: 36px;
   }
 
   .slide-heading span {
@@ -118,49 +111,45 @@
   }
 
   /* ── Cards ── */
-  .cards { display: grid; gap: 16px; }
-  .cards-3 { grid-template-columns: repeat(3, 1fr); }
-  .cards-2 { grid-template-columns: repeat(2, 1fr); }
-
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: clamp(18px, 2.2vw, 28px);
+    border-radius: 14px;
+    padding: clamp(20px, 2.5vw, 32px);
   }
 
   .card-num {
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.15em;
     color: var(--accent-light);
     margin-bottom: 10px;
   }
 
   .card-title {
-    font-size: clamp(14px, 1.5vw, 18px);
+    font-size: clamp(16px, 1.8vw, 22px);
     font-weight: 700;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     line-height: 1.4;
   }
 
   .card-body {
-    font-size: clamp(11px, 1vw, 13px);
+    font-size: clamp(13px, 1.2vw, 15px);
     color: var(--text-muted);
-    line-height: 1.8;
+    line-height: 1.9;
   }
 
   /* ── Table ── */
   .info-table { width: 100%; border-collapse: collapse; }
   .info-table tr { border-bottom: 1px solid var(--border); }
   .info-table td {
-    padding: 14px 0;
-    font-size: clamp(12px, 1.1vw, 14px);
+    padding: 16px 0;
+    font-size: clamp(14px, 1.3vw, 17px);
     line-height: 1.6;
   }
   .info-table td:first-child {
-    width: 140px;
+    width: 160px;
     color: var(--text-muted);
-    font-size: 11px;
+    font-size: clamp(12px, 1vw, 14px);
     letter-spacing: 0.05em;
   }
 
@@ -168,88 +157,64 @@
   .mission-box {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
-    border-radius: 12px;
-    padding: clamp(24px, 3vw, 40px) clamp(24px, 4vw, 48px);
-    margin-bottom: 24px;
+    border-left: 4px solid var(--accent);
+    border-radius: 14px;
+    padding: clamp(28px, 3.5vw, 48px) clamp(28px, 4.5vw, 56px);
   }
 
   .mission-box .lead {
-    font-size: clamp(18px, 2.2vw, 30px);
+    font-size: clamp(22px, 2.8vw, 38px);
     font-weight: 700;
     line-height: 1.6;
   }
 
   .mission-box .sub {
-    margin-top: 14px;
-    font-size: clamp(12px, 1.1vw, 14px);
+    margin-top: 18px;
+    font-size: clamp(14px, 1.3vw, 17px);
     color: var(--text-muted);
-    line-height: 1.9;
-  }
-
-  /* ── Tag ── */
-  .tag {
-    display: inline-block;
-    background: rgba(13, 110, 110, 0.15);
-    border: 1px solid rgba(13, 110, 110, 0.4);
-    color: var(--accent-light);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    padding: 4px 12px;
-    border-radius: 100px;
-    margin-bottom: 10px;
-  }
-  .tag-orange {
-    background: rgba(224, 123, 84, 0.12);
-    border-color: rgba(224, 123, 84, 0.4);
-    color: var(--orange-light);
-  }
-  .tag-purple {
-    background: rgba(140, 100, 220, 0.12);
-    border-color: rgba(140, 100, 220, 0.4);
-    color: #b89eff;
+    line-height: 2;
   }
 
   /* ── Profile ── */
   .profile-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 32px;
+    gap: 36px;
     align-items: start;
   }
 
   .profile-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 28px;
+    border-radius: 14px;
+    padding: 32px;
     text-align: center;
   }
 
   .profile-card .role {
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.15em;
     color: var(--accent-light);
-    margin-bottom: 12px;
+    margin-bottom: 14px;
   }
 
   .profile-card .name {
-    font-size: 22px;
+    font-size: 26px;
     font-weight: 700;
     margin-bottom: 4px;
   }
 
   .profile-card .name-en {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-muted);
     letter-spacing: 0.08em;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
   }
 
   .profile-card .bio {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-muted);
-    line-height: 1.9;
+    line-height: 2;
     text-align: left;
   }
 
@@ -258,51 +223,56 @@
     font-weight: 600;
   }
 
-  /* ── Triangle diagram ── */
+  /* ── Triangle ── */
   .triangle-wrap {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px 0;
+    padding: 10px 0;
   }
 
   .triangle-diagram {
     position: relative;
-    width: 420px;
-    height: 380px;
+    width: 520px;
+    height: 460px;
+  }
+
+  .tri-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
   }
 
   .tri-node {
     position: absolute;
-    width: 150px;
     text-align: center;
     background: var(--surface);
     border: 2px solid var(--border);
-    border-radius: 14px;
-    padding: 18px 12px;
+    border-radius: 16px;
+    padding: 22px 20px;
     z-index: 2;
+    min-width: 170px;
   }
 
-  .tri-node-icon {
-    font-size: 28px;
-    margin-bottom: 8px;
-  }
+  .tri-node-icon { font-size: 34px; margin-bottom: 10px; }
 
   .tri-node-label {
-    font-size: 15px;
-    font-weight: 700;
+    font-size: clamp(18px, 2vw, 22px);
+    font-weight: 800;
     line-height: 1.3;
   }
 
   .tri-node-sub {
-    font-size: 10px;
+    font-size: 12px;
     color: var(--text-muted);
-    margin-top: 4px;
+    margin-top: 6px;
   }
 
-  .tri-node.top    { top: 0; left: 50%; transform: translateX(-50%); border-color: var(--accent); }
-  .tri-node.left   { bottom: 0; left: 0; border-color: var(--orange); }
-  .tri-node.right  { bottom: 0; right: 0; border-color: #8c64dc; }
+  .tri-node.top    { top: 0; left: 50%; transform: translateX(-50%); border-color: var(--accent); box-shadow: 0 0 40px rgba(13,110,110,0.15); }
+  .tri-node.left   { bottom: 0; left: 0; border-color: var(--orange); box-shadow: 0 0 40px rgba(224,123,84,0.12); }
+  .tri-node.right  { bottom: 0; right: 0; border-color: var(--purple); box-shadow: 0 0 40px rgba(140,100,220,0.12); }
 
   .tri-center {
     position: absolute;
@@ -314,120 +284,132 @@
   }
 
   .tri-center-label {
-    font-size: 12px;
+    font-size: 14px;
     color: var(--text-muted);
     letter-spacing: 0.1em;
+    font-weight: 600;
   }
 
-  .tri-center-icon {
-    font-size: 20px;
-    margin-bottom: 4px;
-  }
+  .tri-center-icon { font-size: 26px; margin-bottom: 4px; }
 
-  /* SVG arrows */
-  .tri-svg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-  }
-
-  /* ── Resta services overlay ── */
-  .service-overlay {
+  /* ── Services overlay on triangle ── */
+  .offer-layout {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    grid-template-columns: 380px 1fr;
+    gap: 40px;
+    align-items: center;
   }
 
-  .svc-col {
+  .offer-tri-mini {
+    position: relative;
+    width: 340px;
+    height: 300px;
+    margin: 0 auto;
+  }
+
+  .offer-tri-mini .tri-node {
+    min-width: 120px;
+    padding: 14px 12px;
+  }
+
+  .offer-tri-mini .tri-node-icon { font-size: 22px; margin-bottom: 6px; }
+  .offer-tri-mini .tri-node-label { font-size: 14px; }
+  .offer-tri-mini .tri-node-sub { font-size: 10px; }
+
+  .offer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .offer-item {
     background: var(--surface);
     border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .offer-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
     border-radius: 12px;
-    padding: 22px 18px;
-    border-top: 3px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .svc-col.orange { border-top-color: var(--orange); }
-  .svc-col.purple { border-top-color: #8c64dc; }
+  .offer-icon.teal   { background: rgba(13,110,110,0.15); }
+  .offer-icon.orange { background: rgba(224,123,84,0.12); }
+  .offer-icon.purple { background: rgba(140,100,220,0.12); }
 
-  .svc-col-label {
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    color: var(--accent-light);
-    margin-bottom: 10px;
-    font-weight: 700;
+  .offer-name {
+    font-size: clamp(18px, 2.2vw, 26px);
+    font-weight: 800;
+    line-height: 1.3;
   }
 
-  .svc-col.orange .svc-col-label { color: var(--orange-light); }
-  .svc-col.purple .svc-col-label { color: #b89eff; }
-
-  .svc-col-title {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 12px;
-  }
-
-  .svc-item {
-    font-size: 12px;
+  .offer-sub {
+    font-size: clamp(12px, 1vw, 14px);
     color: var(--text-muted);
+    margin-top: 4px;
     line-height: 1.7;
-    padding: 6px 0;
-    border-bottom: 1px solid var(--border);
   }
 
-  .svc-item:last-child { border-bottom: none; }
-
-  .svc-item strong {
-    color: var(--text);
-    font-weight: 600;
-    display: block;
-    margin-bottom: 2px;
-    font-size: 13px;
+  .offer-bar {
+    width: 4px;
+    border-radius: 2px;
+    align-self: stretch;
+    flex-shrink: 0;
   }
+
+  .offer-bar.teal   { background: var(--accent); }
+  .offer-bar.orange { background: var(--orange); }
+  .offer-bar.purple { background: var(--purple); }
 
   /* ── Case study ── */
-  .case-cards { display: grid; gap: 14px; }
+  .case-cards { display: grid; gap: 16px; }
 
   .case-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 24px;
+    border-radius: 14px;
+    padding: 24px 28px;
     display: grid;
     grid-template-columns: 200px 1fr;
-    gap: 20px;
+    gap: 24px;
     align-items: start;
   }
 
-  .case-who {
-    border-right: 1px solid var(--border);
-    padding-right: 20px;
-  }
+  .case-who { border-right: 1px solid var(--border); padding-right: 20px; }
 
   .case-label {
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: 0.12em;
     color: var(--accent-light);
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
 
   .case-name {
-    font-size: 14px;
+    font-size: clamp(15px, 1.5vw, 18px);
     font-weight: 700;
-    line-height: 1.4;
+    line-height: 1.5;
   }
 
   .case-detail {
-    font-size: 12px;
+    font-size: clamp(13px, 1.2vw, 15px);
     color: var(--text-muted);
-    line-height: 1.9;
+    line-height: 2;
   }
 
   .case-detail li {
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     list-style: none;
-    padding-left: 14px;
+    padding-left: 16px;
     position: relative;
   }
 
@@ -435,40 +417,40 @@
     content: '';
     position: absolute;
     left: 0;
-    top: 8px;
-    width: 5px;
-    height: 5px;
+    top: 10px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: var(--accent-light);
   }
 
   .case-highlight {
     color: var(--orange-light);
-    font-weight: 600;
+    font-weight: 700;
   }
 
   /* ── Contact ── */
   .contact-box {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: clamp(32px, 4vw, 56px);
+    border-radius: 16px;
+    padding: clamp(36px, 5vw, 64px);
     text-align: center;
-    max-width: 600px;
+    max-width: 640px;
     margin: 0 auto;
   }
 
   .contact-box .url {
-    font-size: clamp(18px, 2vw, 26px);
+    font-size: clamp(22px, 2.5vw, 32px);
     font-weight: 700;
     color: var(--accent-light);
-    margin: 20px 0 12px;
+    margin: 24px 0 14px;
   }
 
   .contact-box .desc {
-    font-size: 13px;
+    font-size: 15px;
     color: var(--text-muted);
-    line-height: 1.8;
+    line-height: 1.9;
   }
 
   /* ── Nav ── */
@@ -480,11 +462,11 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    background: rgba(17,17,17,0.8);
+    background: rgba(17,17,17,0.85);
     backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: 100px;
-    padding: 10px 20px;
+    padding: 10px 22px;
     z-index: 100;
   }
 
@@ -492,7 +474,7 @@
     background: none;
     border: none;
     color: var(--text-muted);
-    font-size: 18px;
+    font-size: 20px;
     cursor: pointer;
     padding: 4px 8px;
     transition: color 0.2s;
@@ -502,14 +484,13 @@
   .nav-btn:hover { color: var(--text); }
 
   #slide-counter {
-    font-size: 12px;
+    font-size: 13px;
     letter-spacing: 0.1em;
     color: var(--text-muted);
-    min-width: 48px;
+    min-width: 50px;
     text-align: center;
   }
 
-  /* ── Dots ── */
   #dots {
     position: fixed;
     top: 28px;
@@ -520,8 +501,8 @@
   }
 
   .dot {
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: rgba(255,255,255,0.2);
     cursor: pointer;
@@ -530,44 +511,69 @@
 
   .dot.active {
     background: var(--accent-light);
-    width: 18px;
-    border-radius: 3px;
+    width: 20px;
+    border-radius: 4px;
   }
 
-  /* ── Slide-specific overflow ── */
   .slide-scroll {
     overflow-y: auto;
-    max-height: calc(100vh - 120px);
+    max-height: calc(100vh - 100px);
     padding-right: 8px;
   }
-
   .slide-scroll::-webkit-scrollbar { width: 4px; }
   .slide-scroll::-webkit-scrollbar-track { background: transparent; }
   .slide-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+
+  /* ── Glow accents ── */
+  .glow-teal   { box-shadow: 0 0 60px rgba(13,110,110,0.1); }
+  .glow-orange { box-shadow: 0 0 60px rgba(224,123,84,0.08); }
+  .glow-purple { box-shadow: 0 0 60px rgba(140,100,220,0.08); }
+
+  /* ── Report card ── */
+  .report-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 18px;
+  }
+
+  .report-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .report-item .ri-icon { font-size: 24px; margin-bottom: 8px; }
+  .report-item .ri-label {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
 </style>
 </head>
 <body>
 
 <div class="slides-wrapper" id="slides">
 
-  <!-- ═══ Slide 1: Title ═══ -->
+  <!-- ═══ 1. Title ═══ -->
   <div class="slide slide-title active">
     <div class="eyebrow">会社説明資料 2026</div>
     <h1>Resta</h1>
     <p class="tagline">
-      お客様と同じ視点で課題の本質に向き合う、<br>
+      お客様と同じ現場・視点で課題の本質に向き合う、<br>
       グロースハックパートナー。
     </p>
     <div class="meta">合同会社リスタ　|　r-sta.com</div>
   </div>
 
-  <!-- ═══ Slide 2: 会社概要 + 代表紹介 ═══ -->
+  <!-- ═══ 2. 会社概要 + 代表紹介 ═══ -->
   <div class="slide">
     <div class="slide-content">
       <div class="slide-label">About Us</div>
       <h2 class="slide-heading">会社概要 ／ <span>代表紹介</span></h2>
       <div class="profile-layout">
-        <!-- 会社概要 -->
         <div>
           <table class="info-table">
             <tr><td>会社名</td><td>合同会社リスタ</td></tr>
@@ -577,7 +583,6 @@
             <tr><td>事業内容</td><td>マーケティング・営業企画 / AI・DX支援 / 人材定着支援</td></tr>
           </table>
         </div>
-        <!-- 代表 -->
         <div class="profile-card">
           <div class="role">FOUNDER</div>
           <div class="name">松原 忠</div>
@@ -592,65 +597,49 @@
     </div>
   </div>
 
-  <!-- ═══ Slide 3: コンセプト ═══ -->
+  <!-- ═══ 3. コンセプト ═══ -->
   <div class="slide">
     <div class="slide-content">
       <div class="slide-label">Concept</div>
       <h2 class="slide-heading">私たちが<span>目指すもの</span></h2>
       <div class="mission-box">
         <div class="lead">
-          お客様と同じ視点で課題の本質に向き合う、<br>
+          お客様と同じ現場・視点で課題の本質に向き合う、<br>
           「グロースハックパートナー」。
         </div>
         <div class="sub">
-          多くの中小・成長企業は、良いプロダクトやサービスを持ちながらも、<br>
-          それを成長に変える仕組みが整っていません。<br>
-          Restaは外部のコンサルタントではなく、事業の内側に入り込むパートナーです。
-        </div>
-      </div>
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 8px;">
-        <div class="card" style="border-top: 3px solid var(--accent); padding: 22px 20px;">
-          <div style="font-size: clamp(18px, 2vw, 24px); font-weight: 800; margin-bottom: 6px;">マーケティング<br>営業企画</div>
-          <div style="font-size: 11px; color: var(--text-muted); line-height: 1.7;">売上を伸ばす</div>
-        </div>
-        <div class="card" style="border-top: 3px solid var(--orange); padding: 22px 20px;">
-          <div style="font-size: clamp(18px, 2vw, 24px); font-weight: 800; margin-bottom: 6px;">人・組織<br>定着支援</div>
-          <div style="font-size: 11px; color: var(--text-muted); line-height: 1.7;">組織を強くする</div>
-        </div>
-        <div class="card" style="border-top: 3px solid #8c64dc; padding: 22px 20px;">
-          <div style="font-size: clamp(18px, 2vw, 24px); font-weight: 800; margin-bottom: 6px;">AI・システム<br>DX支援</div>
-          <div style="font-size: 11px; color: var(--text-muted); line-height: 1.7;">仕組みで回す</div>
+          事業成長に必要なのは、外からのアドバイスではなく、<br>
+          現場に入り込み、一緒に手を動かすパートナーの存在だと考えています。<br>
+          Restaは「事業」「人・組織」「仕組み」の3つの歯車をかみ合わせ、<br>
+          持続的な成長を一緒につくります。
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ Slide 4: グロースハックの3要素 ═══ -->
+  <!-- ═══ 4. グロースハックの3要素 ═══ -->
   <div class="slide">
     <div class="slide-content">
       <div class="slide-label">Growth Hack Framework</div>
       <h2 class="slide-heading">私たちが考える<span>グロースハック</span></h2>
       <div class="triangle-wrap">
         <div class="triangle-diagram">
-          <!-- SVG arrows -->
-          <svg class="tri-svg" viewBox="0 0 420 380">
-            <!-- Top → Left -->
-            <path d="M175 95 L85 260" stroke="rgba(18,160,160,0.3)" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
-            <!-- Left → Right -->
-            <path d="M180 310 L240 310" stroke="rgba(224,123,84,0.3)" stroke-width="2" fill="none" marker-end="url(#arrow2)"/>
-            <!-- Right → Top -->
-            <path d="M335 260 L245 95" stroke="rgba(140,100,220,0.3)" stroke-width="2" fill="none" marker-end="url(#arrow3)"/>
-            <!-- Reverse arrows -->
-            <path d="M85 245 L170 85" stroke="rgba(18,160,160,0.15)" stroke-width="1.5" fill="none" stroke-dasharray="4 4"/>
-            <path d="M245 295 L185 295" stroke="rgba(224,123,84,0.15)" stroke-width="1.5" fill="none" stroke-dasharray="4 4"/>
-            <path d="M250 85 L340 245" stroke="rgba(140,100,220,0.15)" stroke-width="1.5" fill="none" stroke-dasharray="4 4"/>
+          <svg class="tri-svg" viewBox="0 0 520 460">
+            <!-- 双方向矢印: Top ↔ Left -->
+            <line x1="210" y1="120" x2="110" y2="310" stroke="rgba(18,160,160,0.4)" stroke-width="2.5" marker-start="url(#arrowS-teal)" marker-end="url(#arrowE-teal)"/>
+            <!-- 双方向矢印: Left ↔ Right -->
+            <line x1="200" y1="385" x2="320" y2="385" stroke="rgba(224,123,84,0.4)" stroke-width="2.5" marker-start="url(#arrowS-orange)" marker-end="url(#arrowE-orange)"/>
+            <!-- 双方向矢印: Right ↔ Top -->
+            <line x1="410" y1="310" x2="310" y2="120" stroke="rgba(140,100,220,0.4)" stroke-width="2.5" marker-start="url(#arrowS-purple)" marker-end="url(#arrowE-purple)"/>
             <defs>
-              <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="rgba(18,160,160,0.5)"/></marker>
-              <marker id="arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="rgba(224,123,84,0.5)"/></marker>
-              <marker id="arrow3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="rgba(140,100,220,0.5)"/></marker>
+              <marker id="arrowE-teal" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8" fill="rgba(18,160,160,0.6)"/></marker>
+              <marker id="arrowS-teal" markerWidth="10" markerHeight="8" refX="0" refY="4" orient="auto"><path d="M10,0 L0,4 L10,8" fill="rgba(18,160,160,0.6)"/></marker>
+              <marker id="arrowE-orange" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8" fill="rgba(224,123,84,0.6)"/></marker>
+              <marker id="arrowS-orange" markerWidth="10" markerHeight="8" refX="0" refY="4" orient="auto"><path d="M10,0 L0,4 L10,8" fill="rgba(224,123,84,0.6)"/></marker>
+              <marker id="arrowE-purple" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8" fill="rgba(140,100,220,0.6)"/></marker>
+              <marker id="arrowS-purple" markerWidth="10" markerHeight="8" refX="0" refY="4" orient="auto"><path d="M10,0 L0,4 L10,8" fill="rgba(140,100,220,0.6)"/></marker>
             </defs>
           </svg>
-          <!-- Nodes -->
           <div class="tri-node top">
             <div class="tri-node-icon">📈</div>
             <div class="tri-node-label">事業</div>
@@ -666,59 +655,84 @@
             <div class="tri-node-label">AI・システム</div>
             <div class="tri-node-sub">効率化・自動化</div>
           </div>
-          <!-- Center -->
           <div class="tri-center">
             <div class="tri-center-icon">🔄</div>
             <div class="tri-center-label">循環</div>
           </div>
         </div>
       </div>
-      <div style="text-align:center; font-size: 13px; color: var(--text-muted); line-height: 1.9; margin-top: 8px;">
+      <div style="text-align:center; font-size: clamp(14px, 1.3vw, 17px); color: var(--text-muted); line-height: 2; margin-top: 4px;">
         人が事業を動かし、システムが人を支え、事業がシステムへの投資を生む。<br>
-        この3つの歯車が噛み合うことで、持続的な成長が実現します。
+        この3つが互いに支え合うことで、持続的な成長が実現します。
       </div>
     </div>
   </div>
 
-  <!-- ═══ Slide 5: Restaの提供領域 ═══ -->
+  <!-- ═══ 5. Restaの提供領域 ═══ -->
   <div class="slide">
     <div class="slide-content">
       <div class="slide-label">What We Offer</div>
       <h2 class="slide-heading">Restaが<span>提供するもの</span></h2>
-      <div class="service-overlay">
-        <!-- 事業 -->
-        <div class="svc-col">
-          <div class="svc-col-label">📈 事業</div>
-          <div class="svc-col-title">営業企画・マーケティング</div>
-          <div class="svc-item"><strong>マーケティング戦略設計</strong>ターゲット設計・チャネル設計・施策立案</div>
-          <div class="svc-item"><strong>営業企画・リード獲得</strong>リスト構築・テレアポ・メール施策の設計と実行</div>
-          <div class="svc-item"><strong>ダイレクトマーケティング</strong>大手媒体依存からの脱却、自社集客力の構築</div>
+      <div class="offer-layout">
+        <!-- Mini triangle -->
+        <div class="offer-tri-mini">
+          <svg class="tri-svg" viewBox="0 0 340 300">
+            <line x1="135" y1="80" x2="65" y2="200" stroke="rgba(18,160,160,0.3)" stroke-width="2" marker-start="url(#arrowS-teal)" marker-end="url(#arrowE-teal)"/>
+            <line x1="130" y1="250" x2="210" y2="250" stroke="rgba(224,123,84,0.3)" stroke-width="2" marker-start="url(#arrowS-orange)" marker-end="url(#arrowE-orange)"/>
+            <line x1="275" y1="200" x2="205" y2="80" stroke="rgba(140,100,220,0.3)" stroke-width="2" marker-start="url(#arrowS-purple)" marker-end="url(#arrowE-purple)"/>
+          </svg>
+          <div class="tri-node top">
+            <div class="tri-node-icon">📈</div>
+            <div class="tri-node-label">事業</div>
+          </div>
+          <div class="tri-node left">
+            <div class="tri-node-icon">👥</div>
+            <div class="tri-node-label">人・組織</div>
+          </div>
+          <div class="tri-node right">
+            <div class="tri-node-icon">⚙️</div>
+            <div class="tri-node-label">AI・システム</div>
+          </div>
+          <div class="tri-center">
+            <div class="tri-center-icon">🔄</div>
+          </div>
         </div>
-        <!-- 人・組織 -->
-        <div class="svc-col orange">
-          <div class="svc-col-label">👥 人・組織</div>
-          <div class="svc-col-title">長期雇用・定着</div>
-          <div class="svc-item"><strong>福利厚生の企画支援</strong>固定費を上げずに実質的な待遇改善を設計</div>
-          <div class="svc-item"><strong>マネーリテラシー向上</strong>FP連携による金融セミナー・個別相談の提供</div>
-          <div class="svc-item"><strong>働く不安の解消</strong>将来不安・キャリア不安を可視化し、経営判断の材料に</div>
-        </div>
-        <!-- AI・システム -->
-        <div class="svc-col purple">
-          <div class="svc-col-label">⚙️ AI・システム</div>
-          <div class="svc-col-title">DX・AI活用支援</div>
-          <div class="svc-item"><strong>システム・アプリ開発</strong>業務フローに最適化したツール・アプリの構築</div>
-          <div class="svc-item"><strong>業務効率化・DX支援</strong>オペレーションの可視化から新ツール導入まで伴走</div>
-          <div class="svc-item"><strong>AI業務効率化研修</strong>現場が自走できるレベルまでAI活用スキルを底上げ</div>
+        <!-- Service list -->
+        <div class="offer-list">
+          <div class="offer-item glow-teal">
+            <div class="offer-bar teal"></div>
+            <div class="offer-icon teal">📈</div>
+            <div>
+              <div class="offer-name">営業企画・マーケティング支援</div>
+              <div class="offer-sub">ターゲット設計・リード獲得・集客チャネル構築</div>
+            </div>
+          </div>
+          <div class="offer-item glow-purple">
+            <div class="offer-bar purple"></div>
+            <div class="offer-icon purple">⚙️</div>
+            <div>
+              <div class="offer-name">DX・AI活用支援</div>
+              <div class="offer-sub">業務オペレーション改善・ツール導入・AI研修</div>
+            </div>
+          </div>
+          <div class="offer-item glow-orange">
+            <div class="offer-bar orange"></div>
+            <div class="offer-icon orange">👥</div>
+            <div>
+              <div class="offer-name">人材の定着支援</div>
+              <div class="offer-sub">福利厚生設計・マネーリテラシー向上・働く不安の解消</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ Slide 6: 事例 – マーケティング ═══ -->
+  <!-- ═══ 6. 事例 – マーケティング ═══ -->
   <div class="slide">
     <div class="slide-content slide-scroll">
       <div class="slide-label">Case Study — Marketing</div>
-      <h2 class="slide-heading" style="margin-bottom: 28px;">マーケティング・営業企画<span>支援事例</span></h2>
+      <h2 class="slide-heading" style="margin-bottom: 24px;">マーケティング・営業企画<span>支援事例</span></h2>
       <div class="case-cards">
         <div class="case-card">
           <div class="case-who">
@@ -772,11 +786,11 @@
     </div>
   </div>
 
-  <!-- ═══ Slide 7: 事例 – AI・DX ═══ -->
+  <!-- ═══ 7. 事例 – AI・DX ═══ -->
   <div class="slide">
     <div class="slide-content slide-scroll">
       <div class="slide-label">Case Study — AI / DX</div>
-      <h2 class="slide-heading" style="margin-bottom: 28px;">AI・DX<span>支援事例</span></h2>
+      <h2 class="slide-heading" style="margin-bottom: 24px;">AI・DX<span>支援事例</span></h2>
       <div class="case-cards">
         <div class="case-card">
           <div class="case-who">
@@ -785,7 +799,7 @@
           </div>
           <div class="case-detail">
             <ul>
-              <li>現場のオペレーションを泥臭く可視化し、「効率良い」ではなく<strong>「儲かるオペレーション」</strong>を再構築</li>
+              <li>現場のオペレーションを泥臭く可視化し、「効率良い」ではなく<strong style="color:var(--text);">「儲かるオペレーション」</strong>を再構築</li>
               <li>新ツール・変更点が現場に自然に溶け込むレベルまで緻密に設計し、導入後も小さく早くPDCAを実行</li>
               <li>顧客対応・データ管理・現場対応等の領域で、<span class="case-highlight">年間2,712時間（約1.5人分）の工数削減</span>を実現。<span class="case-highlight">前年度比 売上1.5倍</span>を達成</li>
             </ul>
@@ -808,46 +822,54 @@
     </div>
   </div>
 
-  <!-- ═══ Slide 8: 事例 – 人材定着 ═══ -->
+  <!-- ═══ 8. 事例 – 人材定着 ═══ -->
   <div class="slide">
     <div class="slide-content slide-scroll">
       <div class="slide-label">Case Study — Retention</div>
-      <h2 class="slide-heading" style="margin-bottom: 28px;">人材定着<span>支援事例</span></h2>
+      <h2 class="slide-heading" style="margin-bottom: 24px;">人材定着<span>支援事例</span></h2>
       <div class="case-cards">
-        <div class="case-card" style="grid-template-columns: 200px 1fr;">
+        <div class="case-card">
           <div class="case-who">
             <div class="case-label">CASE 01</div>
             <div class="case-name">180名の派遣会社</div>
           </div>
           <div class="case-detail">
             <ul>
-              <li>人材流動性が高いレッドオーシャン環境でも<strong>「実質賃上げ」の代替策</strong>を提供し、<span class="case-highlight">定着率向上</span>を実現</li>
+              <li>人材流動性が高いレッドオーシャン環境でも<strong style="color:var(--text);">「実質賃上げ」の代替策</strong>を提供し、<span class="case-highlight">定着率向上</span>を実現</li>
               <li>弊社及び連携FPの専門知見を活かしたスタッフ向け金融セミナーを無償提供</li>
-              <li>固定費を上げずにスタッフの可処分所得を最大化させ、<strong>「選ばれる会社」</strong>としてのブランドを構築</li>
+              <li>固定費を上げずにスタッフの可処分所得を最大化させ、<strong style="color:var(--text);">「選ばれる会社」</strong>としてのブランドを構築</li>
             </ul>
           </div>
         </div>
       </div>
-      <div class="card" style="margin-top: 16px; padding: 20px 24px;">
+      <div class="card" style="margin-top: 18px;">
         <div class="card-num">REPORT OUTPUT</div>
-        <div class="card-title" style="font-size: 14px; margin-bottom: 10px;">実施後に提供する経営判断レポート</div>
-        <div class="card-body" style="line-height: 2;">
-          セミナー実施後、スタッフのデータを可視化し経営判断の材料として提供<br>
-          ・資産形成・ライフプラン支援による「安心感」「モチベーション」の変化度合い<br>
-          ・会社への期待（健康管理 / スキルアップ支援 / 柔軟な働き方 / メンター制度 等）<br>
-          ・将来のキャリア・年収アップへの関心度データ
+        <div class="card-title">実施後に提供する経営判断レポート</div>
+        <div class="report-grid">
+          <div class="report-item">
+            <div class="ri-icon">📊</div>
+            <div class="ri-label">安心感・モチベーション<br>の変化度合い</div>
+          </div>
+          <div class="report-item">
+            <div class="ri-icon">🎯</div>
+            <div class="ri-label">会社への期待<br><span style="font-size:11px;color:var(--text-muted);">健康管理 / スキルアップ / 柔軟な働き方 等</span></div>
+          </div>
+          <div class="report-item">
+            <div class="ri-icon">📈</div>
+            <div class="ri-label">キャリア・年収アップ<br>への関心度データ</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ Slide 9: Contact ═══ -->
+  <!-- ═══ 9. Contact ═══ -->
   <div class="slide">
     <div class="slide-content" style="text-align: center;">
       <div class="slide-label" style="text-align:center;">Contact</div>
       <h2 class="slide-heading" style="text-align:center;">まずは、<span>お気軽にご相談を。</span></h2>
       <div class="contact-box">
-        <div style="font-size: 13px; color: var(--text-muted); letter-spacing: 0.1em;">WEB SITE</div>
+        <div style="font-size: 14px; color: var(--text-muted); letter-spacing: 0.1em;">WEB SITE</div>
         <div class="url">r-sta.com</div>
         <div class="desc">
           マーケティング・AI/DX・人材定着など、<br>
@@ -860,7 +882,6 @@
 
 </div>
 
-<!-- Navigation -->
 <div id="nav">
   <button class="nav-btn" id="prev">←</button>
   <span id="slide-counter">1 / 9</span>
