@@ -713,11 +713,11 @@
         <input type="text" class="auth-input" id="req-company" placeholder="株式会社◯◯">
         <label>名前 <span style="color:var(--orange);">*</span></label>
         <input type="text" class="auth-input" id="req-name" placeholder="山田 太郎">
-        <label>役職</label>
+        <label>役職 <span style="color:var(--orange);">*</span></label>
         <input type="text" class="auth-input" id="req-title" placeholder="部長">
-        <label>メールアドレス</label>
+        <label>メールアドレス <span style="color:var(--orange);">*</span></label>
         <input type="email" class="auth-input" id="req-email" disabled>
-        <label>電話番号</label>
+        <label>電話番号 <span style="color:var(--orange);">*</span></label>
         <input type="tel" class="auth-input" id="req-phone" placeholder="090-0000-0000">
         <label>申し送り事項</label>
         <textarea class="auth-input" id="req-note" placeholder="ご自由にお書きください"></textarea>
@@ -1043,7 +1043,7 @@
   <div class="slide">
     <div class="slide-content" style="text-align: center;">
       <div class="slide-label" style="text-align:center;">Contact</div>
-      <h2 class="slide-heading" style="text-align:center;">まずは、<span>お気軽にご相談を。</span></h2>
+      <h2 class="slide-heading" style="text-align:center;">グロースのためのミッション、<span>ご用命ください。</span></h2>
       <div class="contact-box">
         <div style="font-size: 14px; color: var(--text-muted); letter-spacing: 0.1em;">WEB SITE</div>
         <div class="url"><a href="https://r-sta.com" target="_blank" style="color: var(--accent-light); text-decoration: none;">r-sta.com</a></div>
@@ -1121,7 +1121,10 @@
     const msg = document.getElementById('req-msg');
     const btn = document.getElementById('req-submit');
 
-    if (!company || !name) { msg.className = 'auth-msg error'; msg.textContent = '会社名と名前は必須です'; return; }
+    const title = document.getElementById('req-title').value.trim();
+    const email = document.getElementById('req-email').value.trim();
+    const phone = document.getElementById('req-phone').value.trim();
+    if (!company || !name || !title || !email || !phone) { msg.className = 'auth-msg error'; msg.textContent = '申し送り事項以外はすべて必須です'; return; }
 
     btn.disabled = true;
     btn.textContent = '送信中...';
