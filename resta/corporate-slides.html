@@ -551,11 +551,181 @@
     font-weight: 600;
     line-height: 1.5;
   }
+
+  /* ── Auth gate ── */
+  #auth-gate {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s ease;
+  }
+
+  #auth-gate.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .auth-box {
+    width: 100%;
+    max-width: 480px;
+    padding: 0 24px;
+    text-align: center;
+  }
+
+  .auth-box h1 {
+    font-size: 48px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-light), #3dd6d6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+
+  .auth-box .auth-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    margin-bottom: 36px;
+  }
+
+  .auth-input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 15px;
+    padding: 14px 18px;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+  }
+
+  .auth-input:focus {
+    border-color: var(--accent);
+  }
+
+  .auth-input::placeholder {
+    color: rgba(245,245,245,0.3);
+  }
+
+  .auth-btn {
+    width: 100%;
+    background: var(--accent);
+    border: none;
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px;
+    margin-top: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: inherit;
+  }
+
+  .auth-btn:hover { background: var(--accent-light); }
+  .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .auth-msg {
+    font-size: 13px;
+    margin-top: 14px;
+    min-height: 20px;
+    line-height: 1.6;
+  }
+
+  .auth-msg.error { color: var(--orange-light); }
+  .auth-msg.success { color: var(--accent-light); }
+
+  /* Request form */
+  .request-form {
+    text-align: left;
+    margin-top: 24px;
+  }
+
+  .request-form label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+    margin-top: 14px;
+  }
+
+  .request-form label:first-child { margin-top: 0; }
+
+  .request-form textarea {
+    resize: vertical;
+    min-height: 60px;
+  }
+
+  .request-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 28px 0 4px;
+  }
+
+  .request-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    text-align: center;
+  }
+
+  .request-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 8px;
+  }
 </style>
 </head>
 <body>
 
-<div class="slides-wrapper" id="slides">
+<!-- ── Auth Gate ── -->
+<div id="auth-gate">
+  <div class="auth-box">
+    <h1>Resta</h1>
+    <div class="auth-sub">会社説明資料</div>
+
+    <!-- Step 1: Email input -->
+    <div id="auth-step-email">
+      <input type="email" class="auth-input" id="auth-email" placeholder="メールアドレスを入力">
+      <button class="auth-btn" id="auth-submit" onclick="checkAuth()">ログイン</button>
+      <div class="auth-msg" id="auth-msg"></div>
+    </div>
+
+    <!-- Step 2: Request form (shown when email not found) -->
+    <div id="auth-step-request" style="display:none;">
+      <hr class="request-divider">
+      <div class="request-title">閲覧リクエスト</div>
+      <div class="request-desc">以下を入力して送信してください。担当者が確認後、閲覧可能になります。</div>
+      <div class="request-form">
+        <label>会社名 <span style="color:var(--orange);">*</span></label>
+        <input type="text" class="auth-input" id="req-company" placeholder="株式会社◯◯">
+        <label>名前 <span style="color:var(--orange);">*</span></label>
+        <input type="text" class="auth-input" id="req-name" placeholder="山田 太郎">
+        <label>役職</label>
+        <input type="text" class="auth-input" id="req-title" placeholder="部長">
+        <label>メールアドレス</label>
+        <input type="email" class="auth-input" id="req-email" disabled>
+        <label>電話番号</label>
+        <input type="tel" class="auth-input" id="req-phone" placeholder="090-0000-0000">
+        <label>申し送り事項</label>
+        <textarea class="auth-input" id="req-note" placeholder="ご自由にお書きください"></textarea>
+        <button class="auth-btn" id="req-submit" onclick="sendRequest()">リクエストを送信</button>
+        <div class="auth-msg" id="req-msg"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slides-wrapper" id="slides" style="display:none;">
 
   <!-- ═══ 1. Title ═══ -->
   <div class="slide slide-title active">
@@ -891,13 +1061,111 @@
 
 </div>
 
-<div id="nav">
+<div id="nav" style="display:none;">
   <button class="nav-btn" id="prev">←</button>
   <span id="slide-counter">1 / 9</span>
   <button class="nav-btn" id="next">→</button>
 </div>
 
-<div id="dots"></div>
+<div id="dots" style="display:none;"></div>
+
+<script>
+  // ── Auth ──
+  // TODO: デプロイ後にURLを差し替えてください
+  const GAS_URL = 'YOUR_GAS_DEPLOY_URL_HERE';
+
+  function checkAuth() {
+    const email = document.getElementById('auth-email').value.trim();
+    const msg = document.getElementById('auth-msg');
+    const btn = document.getElementById('auth-submit');
+    if (!email) { msg.className = 'auth-msg error'; msg.textContent = 'メールアドレスを入力してください'; return; }
+
+    btn.disabled = true;
+    btn.textContent = '確認中...';
+    msg.className = 'auth-msg'; msg.textContent = '';
+
+    fetch(GAS_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'check', email: email })
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.approved) {
+        msg.className = 'auth-msg success';
+        msg.textContent = '認証成功';
+        sessionStorage.setItem('resta_auth', email);
+        setTimeout(showSlides, 500);
+      } else {
+        msg.className = 'auth-msg error';
+        msg.textContent = 'このメールアドレスは登録されていません';
+        document.getElementById('req-email').value = email;
+        document.getElementById('auth-step-request').style.display = 'block';
+      }
+      btn.disabled = false;
+      btn.textContent = 'ログイン';
+    })
+    .catch(() => {
+      msg.className = 'auth-msg error';
+      msg.textContent = '通信エラーが発生しました。もう一度お試しください。';
+      btn.disabled = false;
+      btn.textContent = 'ログイン';
+    });
+  }
+
+  function sendRequest() {
+    const company = document.getElementById('req-company').value.trim();
+    const name = document.getElementById('req-name').value.trim();
+    const msg = document.getElementById('req-msg');
+    const btn = document.getElementById('req-submit');
+
+    if (!company || !name) { msg.className = 'auth-msg error'; msg.textContent = '会社名と名前は必須です'; return; }
+
+    btn.disabled = true;
+    btn.textContent = '送信中...';
+
+    fetch(GAS_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'request',
+        company: company,
+        name: name,
+        title: document.getElementById('req-title').value.trim(),
+        email: document.getElementById('req-email').value.trim(),
+        phone: document.getElementById('req-phone').value.trim(),
+        note: document.getElementById('req-note').value.trim()
+      })
+    })
+    .then(r => r.json())
+    .then(() => {
+      msg.className = 'auth-msg success';
+      msg.textContent = 'リクエストを送信しました。担当者が確認後、ご連絡いたします。';
+      btn.style.display = 'none';
+    })
+    .catch(() => {
+      msg.className = 'auth-msg error';
+      msg.textContent = '通信エラーが発生しました。もう一度お試しください。';
+      btn.disabled = false;
+      btn.textContent = 'リクエストを送信';
+    });
+  }
+
+  function showSlides() {
+    document.getElementById('auth-gate').classList.add('hidden');
+    document.getElementById('slides').style.display = '';
+    document.getElementById('nav').style.display = '';
+    document.getElementById('dots').style.display = '';
+  }
+
+  // セッション内は再認証不要
+  if (sessionStorage.getItem('resta_auth')) {
+    showSlides();
+  }
+
+  // Enter key でログイン
+  document.getElementById('auth-email').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkAuth();
+  });
+</script>
 
 <script>
   const slides = document.querySelectorAll('.slide');
