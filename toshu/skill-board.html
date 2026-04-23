@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>東舟 スキルボード</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #0A0A0F;
+      color: #E2E8F0;
+      min-height: 100vh;
+    }
+
+    /* --- Auth Gate --- */
+    #auth-gate {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #0A0A0F;
+    }
+    .auth-box {
+      background: #0F172A;
+      border: 1px solid #1E293B;
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      max-width: 360px;
+      width: 90%;
+    }
+    .auth-box h1 { font-size: 20px; margin-bottom: 8px; }
+    .auth-box p { font-size: 13px; color: #64748B; margin-bottom: 24px; }
+    .auth-box input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      background: #1E293B;
+      color: #E2E8F0;
+      font-size: 14px;
+      outline: none;
+      margin-bottom: 12px;
+    }
+    .auth-box input:focus { border-color: #3B82F6; }
+    .auth-box button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #3B82F6;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .auth-box button:hover { background: #2563EB; }
+    .auth-error { color: #EF4444; font-size: 12px; margin-top: 8px; display: none; }
+
+    /* --- App Layout --- */
+    #app { display: none; }
+    .app-header {
+      background: #0F172A;
+      border-bottom: 1px solid #1E293B;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .app-header h1 { font-size: 18px; font-weight: 700; }
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      background: #1E293B;
+      border-radius: 8px;
+      padding: 3px;
+    }
+    .tab-btn {
+      padding: 8px 20px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: #94A3B8;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .tab-btn.active {
+      background: #3B82F6;
+      color: #fff;
+    }
+
+    /* --- Controls --- */
+    .controls {
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .control-group label {
+      font-size: 13px;
+      color: #94A3B8;
+      white-space: nowrap;
+    }
+    select {
+      padding: 8px 12px;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      background: #1E293B;
+      color: #E2E8F0;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      cursor: pointer;
+    }
+    select:focus { border-color: #3B82F6; }
+
+    /* --- Loading --- */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px;
+      color: #64748B;
+      font-size: 14px;
+    }
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #334155;
+      border-top-color: #3B82F6;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-right: 10px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* --- Rank Badge --- */
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .rank-badge.small { width: 28px; height: 28px; font-size: 13px; border-radius: 6px; }
+    .rank-E { background: #1E293B; color: #64748B; }
+    .rank-D { background: #374151; color: #D1D5DB; }
+    .rank-C { background: #1E3A5F; color: #60A5FA; }
+    .rank-B { background: #14532D; color: #4ADE80; }
+    .rank-A { background: #78350F; color: #FBBF24; }
+    .rank-S { background: #7F1D1D; color: #F87171; }
+    .rank-none { background: #1E293B; color: #475569; }
+
+    /* --- Individual View --- */
+    .individual-summary {
+      padding: 0 24px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .summary-card {
+      background: #0F172A;
+      border: 1px solid #1E293B;
+      border-radius: 10px;
+      padding: 20px;
+      flex: 1;
+      min-width: 200px;
+    }
+    .summary-card h3 {
+      font-size: 12px;
+      color: #64748B;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+    .rank-display {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .rank-display .rank-label {
+      font-size: 14px;
+      color: #94A3B8;
+    }
+    .stat-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 6px;
+    }
+    .stat { font-size: 13px; }
+    .stat .num { font-size: 22px; font-weight: 700; }
+    .stat.cleared .num { color: #22C55E; }
+    .stat.partial .num { color: #F59E0B; }
+    .stat.notyet .num { color: #EF4444; }
+
+    .next-rank-info {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #94A3B8;
+      line-height: 1.6;
+    }
+    .next-rank-info strong { color: #E2E8F0; }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 6px;
+      background: #1E293B;
+      border-radius: 3px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.4s;
+    }
+
+    /* --- Grouped Items Table --- */
+    .items-section { padding: 0 24px 24px; }
+    .axis-group { margin-bottom: 16px; }
+    .axis-header {
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 14px;
+      background: #0F172A;
+      border: 1px solid #1E293B;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .axis-header .toggle { font-size: 12px; color: #64748B; }
+    .axis-body {
+      border: 1px solid #1E293B;
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      overflow: hidden;
+    }
+    .ind-table-wrap { overflow-x: auto; }
+    .ind-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .ind-table th {
+      background: #0F172A;
+      color: #64748B;
+      font-weight: 500;
+      font-size: 11px;
+      padding: 8px 12px;
+      text-align: left;
+      border-bottom: 1px solid #1E293B;
+      position: sticky;
+      top: 0;
+    }
+    .ind-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #1E293B;
+      vertical-align: middle;
+    }
+    .ind-table tr:last-child td { border-bottom: none; }
+    .ind-table tr:hover td { background: #111827; }
+    .process-header-row td {
+      font-size: 12px;
+      font-weight: 600;
+      color: #94A3B8;
+      background: #111827 !important;
+      padding: 8px 12px;
+      letter-spacing: 0.3px;
+    }
+    .col-item-name { white-space: normal; }
+    .col-difficulty { width: 60px; text-align: center; font-size: 12px; white-space: nowrap; }
+    .col-required { width: 50px; text-align: center; }
+    .col-eval { width: 50px; text-align: center; font-size: 16px; font-weight: 600; }
+    .required-tag {
+      font-size: 11px;
+      color: #F87171;
+      font-weight: 500;
+    }
+    .mark-ok { color: #22C55E; }
+    .mark-partial { color: #F59E0B; }
+    .mark-ng { color: #EF4444; }
+    .mark-empty { color: #475569; }
+
+    /* --- Overview Table --- */
+    .overview-section { padding: 0 24px 24px; }
+    .overview-table-wrap {
+      overflow-x: auto;
+      border: 1px solid #1E293B;
+      border-radius: 10px;
+    }
+    .overview-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 700px;
+    }
+    .overview-table th,
+    .overview-table td {
+      padding: 10px 12px;
+      text-align: center;
+      border-bottom: 1px solid #1E293B;
+      white-space: nowrap;
+    }
+    .overview-table th {
+      background: #0F172A;
+      color: #94A3B8;
+      font-weight: 500;
+      font-size: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .overview-table th:first-child,
+    .overview-table td:first-child {
+      text-align: left;
+      position: sticky;
+      left: 0;
+      background: #0F172A;
+      z-index: 2;
+      font-weight: 500;
+    }
+    .overview-table tr:last-child td { border-bottom: none; }
+    .overview-table tr:hover td { background: #111827; }
+    .overview-table tr:hover td:first-child { background: #111827; }
+    .delta-positive { color: #22C55E; font-weight: 700; }
+    .delta-zero { color: #475569; }
+    .delta-negative { color: #EF4444; font-weight: 700; }
+    .overview-pct-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 80px; }
+    .overview-pct-num { font-size: 16px; font-weight: 700; }
+    .overview-bar-bg { width: 100%; height: 4px; background: #1E293B; border-radius: 2px; overflow: hidden; }
+    .overview-bar-fill { height: 100%; border-radius: 2px; transition: width 0.4s; }
+    .rank-with-pos { display: inline-flex; align-items: center; gap: 5px; }
+    .rank-pos { font-size: 11px; color: #94A3B8; white-space: nowrap; }
+    .rank-change { display: inline-flex; align-items: center; gap: 6px; }
+    .rank-arrow { color: #64748B; font-size: 12px; }
+    .delta-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .delta-badge.delta-positive { background: #052E16; color: #4ADE80; }
+    .delta-badge.delta-zero { background: #1E293B; color: #475569; }
+    .delta-badge.delta-negative { background: #450A0A; color: #F87171; }
+    .cleared-cell { font-size: 14px; font-weight: 500; }
+
+    /* --- Error --- */
+    .error-msg {
+      padding: 40px 24px;
+      text-align: center;
+      color: #EF4444;
+      font-size: 14px;
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 640px) {
+      .app-header { padding: 12px 16px; }
+      .controls { padding: 12px 16px; }
+      .individual-summary { padding: 0 16px 12px; }
+      .items-section { padding: 0 16px 16px; }
+      .overview-section { padding: 0 16px 16px; }
+      .summary-card { min-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Auth Gate -->
+  <div id="auth-gate">
+    <div class="auth-box">
+      <h1>東舟 スキルボード</h1>
+      <p>パスワードを入力してください</p>
+      <input type="password" id="auth-input" placeholder="パスワード" autocomplete="off">
+      <button onclick="authenticate()">ログイン</button>
+      <div class="auth-error" id="auth-error">パスワードが正しくありません</div>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app">
+    <div class="app-header">
+      <h1>東舟 スキルボード</h1>
+      <div class="tab-bar">
+        <button class="tab-btn active" data-tab="individual" onclick="switchTab('individual')">個人ページ</button>
+        <button class="tab-btn" data-tab="overview" onclick="switchTab('overview')">全体比較</button>
+      </div>
+    </div>
+
+    <!-- Individual View -->
+    <div id="view-individual">
+      <div class="controls">
+        <div class="control-group">
+          <label>評価時期:</label>
+          <select id="sel-period" onchange="onIndividualChange()"></select>
+        </div>
+        <div class="control-group">
+          <label>職人:</label>
+          <select id="sel-worker" onchange="onIndividualChange()"></select>
+        </div>
+      </div>
+      <div id="individual-content"></div>
+    </div>
+
+    <!-- Overview View -->
+    <div id="view-overview" style="display:none">
+      <div class="controls">
+        <div class="control-group">
+          <label>比較元:</label>
+          <select id="sel-period-a" onchange="onOverviewChange()"></select>
+        </div>
+        <div class="control-group">
+          <label>比較先:</label>
+          <select id="sel-period-b" onchange="onOverviewChange()"></select>
+        </div>
+      </div>
+      <div id="overview-content"></div>
+    </div>
+  </div>
+
+<script>
+// ============================================================
+// Configuration
+// ============================================================
+const SHEET_ID = '1UoTqFGf2SwC2KoKREJ1Ib7co5jrSlVJo0esfw2rPdlE';
+const PASSWORD_HASH = '3f95b1b8a32c2c0251dfdbc3c8a30aab6d6e680cf0ef03e8af84a65dff0c4a85'; // SHA-256 of '5050'
+const RANK_ORDER = ['E', 'D', 'C', 'B', 'A', 'S'];
+const RANK_LABELS = {
+  E: 'E（見習い）',
+  D: 'D（平）',
+  C: 'C（中堅）',
+  B: 'B（一人前）',
+  A: 'A（熟練者）',
+  S: 'S（統括者）'
+};
+const RANK_POSITIONS = {
+  E: '見習い', D: '平', C: '中堅', B: '一人前', A: '熟練者', S: '統括者'
+};
+const RANK_COL_HEADERS = ['D（見習い）', 'C（中堅）', 'B（一人前）', 'A（熟練者）', 'S（統括者）'];
+const ITEM_COLS = ['No.', '評価軸', 'カテゴリ', '工程', '項目', '難易度', '必達', '備考'];
+
+// Cache
+const dataCache = {};
+let availablePeriods = [];
+let workerNames = [];
+
+// ============================================================
+// Auth
+// ============================================================
+async function sha256(text) {
+  const data = new TextEncoder().encode(text);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function authenticate() {
+  const input = document.getElementById('auth-input').value;
+  const hash = await sha256(input);
+  if (hash === PASSWORD_HASH) {
+    sessionStorage.setItem('auth', '1');
+    document.getElementById('auth-gate').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    initApp();
+  } else {
+    document.getElementById('auth-error').style.display = 'block';
+  }
+}
+
+document.getElementById('auth-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') authenticate();
+});
+
+// ============================================================
+// Google Sheets Data Fetching
+// ============================================================
+async function fetchSheetData(tabName) {
+  if (dataCache[tabName]) return dataCache[tabName];
+
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(tabName)}`;
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error(`Sheet "${tabName}" not found`);
+  const text = await resp.text();
+
+  const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]+?)\);?\s*$/);
+  if (!match) throw new Error('Failed to parse sheet response');
+  const json = JSON.parse(match[1]);
+
+  if (json.status === 'error') throw new Error(json.errors?.[0]?.detailed_message || 'Sheet error');
+
+  const cols = json.table.cols.map(c => (c.label || '').trim());
+  const rows = json.table.rows.map(r =>
+    r.c.map(cell => (cell && cell.v != null) ? String(cell.v).trim() : '')
+  );
+
+  // Find worker columns (after rank columns)
+  const rankEndIdx = cols.lastIndexOf('S（統括者）');
+  const workers = cols.slice(rankEndIdx + 1).filter(n => n !== '');
+
+  const items = rows.map(row => {
+    const rankReq = {};
+    RANK_ORDER.forEach((rank, i) => {
+      const colIdx = cols.indexOf(RANK_COL_HEADERS[i]);
+      rankReq[rank] = row[colIdx] === '◯';
+    });
+
+    const evaluations = {};
+    workers.forEach(name => {
+      const colIdx = cols.indexOf(name);
+      evaluations[name] = row[colIdx] || '';
+    });
+
+    return {
+      no: parseInt(row[cols.indexOf('No.')]) || 0,
+      axis: row[cols.indexOf('評価軸')],
+      category: row[cols.indexOf('カテゴリ')],
+      process: row[cols.indexOf('工程')],
+      name: row[cols.indexOf('項目')],
+      difficulty: row[cols.indexOf('難易度')],
+      required: row[cols.indexOf('必達')] === '◯',
+      note: row[cols.indexOf('備考')],
+      rankRequirements: rankReq,
+      evaluations
+    };
+  }).filter(item => item.no > 0);
+
+  const result = { items, workers, tabName };
+  dataCache[tabName] = result;
+  if (workerNames.length === 0) workerNames = workers;
+  return result;
+}
+
+async function discoverPeriods() {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent('設定')}&range=A1:A100`;
+  const resp = await fetch(url);
+  const text = await resp.text();
+  return text.trim().split('\n').map(s => s.replace(/"/g, '').trim()).filter(s => s.match(/^\d{4}-\d{2}$/));
+}
+
+// ============================================================
+// Rank Calculation
+// ============================================================
+function calculateRank(workerName, items) {
+  // E（見習い）はデフォルト。Dの条件を満たせばD以上へ進む
+  let achievedRank = 'E';
+
+  for (const rank of RANK_ORDER) {
+    if (rank === 'E') continue; // Eはデフォルト、判定不要
+
+    const rankItems = items.filter(item => item.rankRequirements[rank]);
+    const total = rankItems.length;
+    if (total === 0) continue;
+
+    const cleared = rankItems.filter(i => i.evaluations[workerName] === '◯').length;
+    const percentOk = cleared >= Math.ceil(total * 0.9);
+
+    const requiredItems = rankItems.filter(i => i.required);
+    const allRequiredOk = requiredItems.every(i => i.evaluations[workerName] === '◯');
+
+    if (percentOk && allRequiredOk) {
+      achievedRank = rank;
+    } else {
+      break;
+    }
+  }
+
+  return achievedRank;
+}
+
+function summarizeWorker(workerName, items) {
+  const rank = calculateRank(workerName, items);
+  const cleared = items.filter(i => i.evaluations[workerName] === '◯').length;
+  const partial = items.filter(i => i.evaluations[workerName] === '△').length;
+  const notCleared = items.filter(i => i.evaluations[workerName] === '✕').length;
+  const empty = items.length - cleared - partial - notCleared;
+
+  // Next rank info
+  let nextRank = null;
+  let nextRankNeeded = 0;
+  let nextRankRequired = [];
+  let nextRankTotal = 0;
+  let nextRankCleared = 0;
+
+  const currentIdx = rank ? RANK_ORDER.indexOf(rank) : -1;
+  if (currentIdx < RANK_ORDER.length - 1) {
+    nextRank = RANK_ORDER[currentIdx + 1];
+    const nextItems = items.filter(i => i.rankRequirements[nextRank]);
+    nextRankTotal = nextItems.length;
+    nextRankCleared = nextItems.filter(i => i.evaluations[workerName] === '◯').length;
+    nextRankNeeded = Math.ceil(nextRankTotal * 0.9) - nextRankCleared;
+    if (nextRankNeeded < 0) nextRankNeeded = 0;
+    nextRankRequired = nextItems.filter(i => i.required && i.evaluations[workerName] !== '◯');
+  }
+
+  return {
+    rank, cleared, partial, notCleared, empty,
+    total: items.length,
+    nextRank, nextRankNeeded, nextRankRequired, nextRankTotal, nextRankCleared
+  };
+}
+
+// ============================================================
+// Rendering — Individual View
+// ============================================================
+function renderIndividual(workerName, data) {
+  const container = document.getElementById('individual-content');
+  const summary = summarizeWorker(workerName, data.items);
+
+  const rankClass = summary.rank ? `rank-${summary.rank}` : 'rank-none';
+  const rankText = summary.rank ? summary.rank : '—';
+  const rankLabel = summary.rank ? RANK_LABELS[summary.rank] : '未到達';
+
+  const pct = summary.total > 0 ? Math.round((summary.cleared / summary.total) * 100) : 0;
+
+  let nextHtml = '';
+  if (summary.nextRank) {
+    const nextPct = summary.nextRankTotal > 0 ? Math.round((summary.nextRankCleared / Math.ceil(summary.nextRankTotal * 0.9)) * 100) : 0;
+    const barPct = Math.min(nextPct, 100);
+    const barColor = summary.nextRank === 'S' ? '#EF4444' : summary.nextRank === 'A' ? '#F59E0B' : summary.nextRank === 'B' ? '#22C55E' : '#3B82F6';
+    nextHtml = `
+      <div class="next-rank-info">
+        <strong>${RANK_LABELS[summary.nextRank]}</strong> まであと <strong>${summary.nextRankNeeded}項目</strong>
+        ${summary.nextRankRequired.length > 0 ? `<br>（必達未達: ${summary.nextRankRequired.length}項目）` : ''}
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width:${barPct}%;background:${barColor}"></div>
+        </div>
+      </div>`;
+  }
+
+  let summaryHtml = `
+    <div class="individual-summary">
+      <div class="summary-card">
+        <h3>現在のランク</h3>
+        <div class="rank-display">
+          <div class="rank-badge ${rankClass}">${rankText}</div>
+          <span class="rank-label">${rankLabel}</span>
+        </div>
+        ${nextHtml}
+      </div>
+      <div class="summary-card">
+        <h3>達成状況</h3>
+        <div class="stat-row">
+          <div class="stat cleared"><div class="num">${summary.cleared}</div>◯ クリア</div>
+          <div class="stat partial"><div class="num">${summary.partial}</div>△ 可能性あり</div>
+          <div class="stat notyet"><div class="num">${summary.notCleared}</div>✕ 未達</div>
+        </div>
+        <div class="next-rank-info" style="margin-top:12px">全${summary.total}項目中 <strong>${pct}%</strong> クリア</div>
+      </div>
+    </div>`;
+
+  // Group items by axis > process
+  const grouped = {};
+  data.items.forEach(item => {
+    if (!grouped[item.axis]) grouped[item.axis] = {};
+    const processKey = item.process;
+    if (!grouped[item.axis][processKey]) grouped[item.axis][processKey] = [];
+    grouped[item.axis][processKey].push(item);
+  });
+
+  let itemsHtml = '<div class="items-section">';
+  for (const axis of Object.keys(grouped)) {
+    const processes = grouped[axis];
+    let tableRows = '';
+    for (const proc of Object.keys(processes)) {
+      // Process header row spanning all columns
+      tableRows += `<tr class="process-header-row"><td colspan="4">${proc}</td></tr>`;
+      for (const item of processes[proc]) {
+        const val = item.evaluations[workerName] || '';
+        let markClass = 'mark-empty';
+        let markText = '—';
+        if (val === '◯') { markClass = 'mark-ok'; markText = '◯'; }
+        else if (val === '△') { markClass = 'mark-partial'; markText = '△'; }
+        else if (val === '✕') { markClass = 'mark-ng'; markText = '✕'; }
+
+        const diffText = (item.difficulty && item.difficulty !== '-') ? item.difficulty : '—';
+        const reqText = item.required ? '<span class="required-tag">◯</span>' : '<span style="color:#334155">—</span>';
+
+        tableRows += `
+          <tr>
+            <td class="col-item-name">${item.name}</td>
+            <td class="col-difficulty">${diffText}</td>
+            <td class="col-required">${reqText}</td>
+            <td class="col-eval ${markClass}">${markText}</td>
+          </tr>`;
+      }
+    }
+
+    // Count for this axis
+    const axisItems = Object.values(processes).flat();
+    const axisCleared = axisItems.filter(i => i.evaluations[workerName] === '◯').length;
+
+    itemsHtml += `
+      <div class="axis-group">
+        <div class="axis-header" onclick="this.parentElement.classList.toggle('collapsed')">
+          <span>${axis}（${axisCleared}/${axisItems.length}）</span>
+          <span class="toggle">▼</span>
+        </div>
+        <div class="axis-body">
+          <div class="ind-table-wrap">
+            <table class="ind-table">
+              <thead>
+                <tr>
+                  <th class="col-item-name">観点</th>
+                  <th class="col-difficulty">難易度</th>
+                  <th class="col-required">必達</th>
+                  <th class="col-eval">評価</th>
+                </tr>
+              </thead>
+              <tbody>${tableRows}</tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+  }
+  itemsHtml += '</div>';
+
+  container.innerHTML = summaryHtml + itemsHtml;
+}
+
+// ============================================================
+// Rendering — Overview View
+// ============================================================
+function renderOverview(dataA, dataB) {
+  const container = document.getElementById('overview-content');
+  const workers = dataA.workers;
+  const total = dataA.items.length;
+  const isSamePeriod = dataA.tabName === dataB.tabName;
+
+  let rows = '';
+  for (const w of workers) {
+    const summA = summarizeWorker(w, dataA.items);
+    const summB = summarizeWorker(w, dataB.items);
+    const delta = summB.cleared - summA.cleared;
+    const pctB = total > 0 ? Math.round((summB.cleared / total) * 100) : 0;
+
+    // Delta display
+    let deltaClass = 'delta-zero';
+    let deltaText = '±0';
+    if (delta > 0) { deltaClass = 'delta-positive'; deltaText = `+${delta}`; }
+    else if (delta < 0) { deltaClass = 'delta-negative'; deltaText = `${delta}`; }
+
+    // Rank change
+    const rankA = summA.rank || '—';
+    const rankB = summB.rank || '—';
+    const rankClassA = summA.rank ? `rank-${summA.rank}` : 'rank-none';
+    const rankClassB = summB.rank ? `rank-${summB.rank}` : 'rank-none';
+    const rankChanged = rankA !== rankB;
+    const posA = RANK_POSITIONS[rankA] || '';
+    const posB = RANK_POSITIONS[rankB] || '';
+    let rankHtml;
+    if (isSamePeriod || !rankChanged) {
+      rankHtml = `<span class="rank-with-pos"><span class="rank-badge small ${rankClassB}">${rankB}</span><span class="rank-pos">${posB}</span></span>`;
+    } else {
+      rankHtml = `<span class="rank-change"><span class="rank-with-pos"><span class="rank-badge small ${rankClassA}">${rankA}</span><span class="rank-pos">${posA}</span></span><span class="rank-arrow">→</span><span class="rank-with-pos"><span class="rank-badge small ${rankClassB}">${rankB}</span><span class="rank-pos">${posB}</span></span></span>`;
+    }
+
+    // Progress bar color
+    let barColor = '#3B82F6';
+    if (pctB >= 80) barColor = '#22C55E';
+    else if (pctB >= 50) barColor = '#F59E0B';
+    else if (pctB < 30) barColor = '#EF4444';
+
+    rows += `
+      <tr>
+        <td>${w}</td>
+        <td>${rankHtml}</td>
+        <td>
+          <div class="overview-pct-cell">
+            <span class="overview-pct-num">${pctB}%</span>
+            <div class="overview-bar-bg"><div class="overview-bar-fill" style="width:${pctB}%;background:${barColor}"></div></div>
+          </div>
+        </td>
+        <td class="cleared-cell">${summA.cleared}</td>
+        <td class="cleared-cell">${summB.cleared}</td>
+        <td><span class="delta-badge ${deltaClass}">${deltaText}</span></td>
+      </tr>`;
+  }
+
+  container.innerHTML = `
+    <div class="overview-section">
+      <div class="overview-table-wrap">
+        <table class="overview-table">
+          <thead>
+            <tr>
+              <th>職人名</th>
+              <th>ランク</th>
+              <th>クリア率</th>
+              <th>◯（${dataA.tabName}）</th>
+              <th>◯（${dataB.tabName}）</th>
+              <th>変化</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+// ============================================================
+// Tab / Navigation
+// ============================================================
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.getElementById('view-individual').style.display = tab === 'individual' ? 'block' : 'none';
+  document.getElementById('view-overview').style.display = tab === 'overview' ? 'block' : 'none';
+
+  if (tab === 'overview') onOverviewChange();
+}
+
+async function onIndividualChange() {
+  const period = document.getElementById('sel-period').value;
+  const worker = document.getElementById('sel-worker').value;
+  if (!period || !worker) return;
+
+  const container = document.getElementById('individual-content');
+  container.innerHTML = '<div class="loading"><div class="spinner"></div>読み込み中...</div>';
+
+  try {
+    const data = await fetchSheetData(period);
+    renderIndividual(worker, data);
+  } catch (e) {
+    container.innerHTML = `<div class="error-msg">データの取得に失敗しました: ${e.message}</div>`;
+  }
+}
+
+async function onOverviewChange() {
+  const periodA = document.getElementById('sel-period-a').value;
+  const periodB = document.getElementById('sel-period-b').value;
+  if (!periodA || !periodB) return;
+
+  const container = document.getElementById('overview-content');
+  container.innerHTML = '<div class="loading"><div class="spinner"></div>読み込み中...</div>';
+
+  try {
+    const [dataA, dataB] = await Promise.all([fetchSheetData(periodA), fetchSheetData(periodB)]);
+    renderOverview(dataA, dataB);
+  } catch (e) {
+    container.innerHTML = `<div class="error-msg">データの取得に失敗しました: ${e.message}</div>`;
+  }
+}
+
+// ============================================================
+// Init
+// ============================================================
+function populateSelects() {
+  const options = availablePeriods.map(p => `<option value="${p}">${p}</option>`).join('');
+  document.getElementById('sel-period').innerHTML = options;
+  document.getElementById('sel-period-a').innerHTML = options;
+  document.getElementById('sel-period-b').innerHTML = options;
+
+  // Default: overview comparison = first vs last
+  if (availablePeriods.length >= 2) {
+    document.getElementById('sel-period-a').value = availablePeriods[availablePeriods.length - 2];
+    document.getElementById('sel-period-b').value = availablePeriods[availablePeriods.length - 1];
+  }
+
+  // Default period for individual = latest
+  document.getElementById('sel-period').value = availablePeriods[availablePeriods.length - 1];
+
+  // Worker select
+  const workerOptions = workerNames.map(w => `<option value="${w}">${w}</option>`).join('');
+  document.getElementById('sel-worker').innerHTML = workerOptions;
+}
+
+async function initApp() {
+  const container = document.getElementById('individual-content');
+  container.innerHTML = '<div class="loading"><div class="spinner"></div>データを読み込み中...</div>';
+
+  try {
+    availablePeriods = await discoverPeriods();
+    if (availablePeriods.length === 0) {
+      container.innerHTML = '<div class="error-msg">評価データのタブが見つかりません</div>';
+      return;
+    }
+
+    // Fetch first period to get worker names
+    await fetchSheetData(availablePeriods[0]);
+    populateSelects();
+    await onIndividualChange();
+  } catch (e) {
+    container.innerHTML = `<div class="error-msg">初期化に失敗しました: ${e.message}</div>`;
+  }
+}
+
+// Check auth on load
+if (sessionStorage.getItem('auth') === '1') {
+  document.getElementById('auth-gate').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  initApp();
+}
+</script>
+</body>
+</html>
