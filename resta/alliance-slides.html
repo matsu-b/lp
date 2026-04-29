@@ -28,10 +28,11 @@
     font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
     overflow: hidden;
     height: 100vh;
+    height: 100dvh;
     width: 100vw;
   }
 
-  .slides-wrapper { width: 100vw; height: 100vh; position: relative; }
+  .slides-wrapper { width: 100vw; height: 100vh; height: 100dvh; position: relative; }
 
   .slide {
     position: absolute;
@@ -768,7 +769,7 @@
 
     .slide-content {
       overflow-y: auto;
-      max-height: calc(100vh - 152px);
+      max-height: calc(100dvh - 152px);
       -webkit-overflow-scrolling: touch;
       padding-right: 4px;
     }
