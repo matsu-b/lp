@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=1280">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Resta | 会社説明資料</title>
 <style>
   :root {
@@ -893,8 +893,85 @@
     margin-bottom: 8px;
   }
 
-  /* ── スマホ：認証フォームのみ読みやすいサイズに ── */
-  @media (max-width: 480px) {
+  /* ── スマホ対応 ── */
+  @media (max-width: 768px) {
+    body { overflow: hidden; }
+
+    .slide {
+      padding: 24px 20px 80px;
+      justify-content: flex-start;
+      padding-top: 48px;
+    }
+
+    .slide-content {
+      overflow-y: auto;
+      max-height: calc(100vh - 120px);
+      padding-right: 4px;
+    }
+    .slide-content::-webkit-scrollbar { width: 3px; }
+    .slide-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+
+    .slide-title {
+      justify-content: center;
+      padding-top: 0;
+    }
+
+    .slide-title h1 { font-size: clamp(56px, 14vw, 80px); }
+    .slide-title .tagline { font-size: clamp(16px, 4vw, 22px); }
+
+    .slide-heading { font-size: clamp(28px, 7vw, 42px); margin-bottom: 24px; }
+    .slide-label { margin-bottom: 12px; }
+
+    /* グリッド → 1カラム */
+    .profile-layout,
+    .case-cards,
+    .report-grid {
+      grid-template-columns: 1fr !important;
+    }
+
+    .case-card {
+      grid-template-columns: 1fr !important;
+    }
+    .case-who {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding-right: 0;
+      padding-bottom: 16px;
+      margin-bottom: 8px;
+    }
+
+    /* offer-layout */
+    .offer-layout {
+      grid-template-columns: 1fr !important;
+    }
+    .offer-tri-mini { display: none; }
+
+    /* 三角図 */
+    .triangle-wrap { overflow: hidden; }
+    .triangle-diagram {
+      transform: scale(0.55);
+      transform-origin: top center;
+      margin-bottom: -220px;
+    }
+
+    /* positioning-flow */
+    .positioning-flow {
+      grid-template-columns: 1fr !important;
+      gap: 8px;
+    }
+    .pos-arrow { display: none; }
+    .pos-solution-list { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+    .pos-solution-item { flex: 1; min-width: 120px; }
+
+    /* ナビ */
+    #nav { padding: 14px 28px; bottom: 20px; }
+    .nav-btn { font-size: 28px; padding: 6px 14px; }
+    #slide-counter { font-size: 17px; }
+
+    /* ドット非表示（スペース確保） */
+    #dots { display: none !important; }
+
+    /* 認証フォーム */
     #auth-gate { padding: 32px 0; }
     .auth-box { padding: 0 20px; }
     .auth-box h1 { font-size: 36px; }
@@ -1518,6 +1595,14 @@
     if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
     if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
   });
+
+  // スワイプ対応
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 40) goTo(dx < 0 ? current + 1 : current - 1);
+  }, { passive: true });
 </script>
 
 </body>
