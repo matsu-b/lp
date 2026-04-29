@@ -947,12 +947,17 @@
 
     /* 三角図 */
     .triangle-wrap {
-      height: 290px;
+      height: 270px;
+      width: 100%;
       overflow: hidden;
-      align-items: flex-start;
+      position: relative;
+      padding: 0;
     }
     .triangle-diagram {
-      transform: scale(0.55);
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%) scale(0.5);
       transform-origin: top center;
     }
 
