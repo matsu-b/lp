@@ -8,12 +8,14 @@
 //    A1: メールアドレス / B1: 会社名 / C1: 名前 / D1: 役職 / E1: 電話番号 / F1: 最終閲覧日時
 // 3. シートを追加し「リクエスト」にリネーム、1行目に以下のヘッダーを入力:
 //    A1: 申請日時 / B1: 会社名 / C1: 名前 / D1: 役職 / E1: メールアドレス / F1: 電話番号 / G1: 申し送り事項
-// 4. 拡張機能 → Apps Script を開く
-// 5. このコードを貼り付けて保存
-// 6. デプロイ → 新しいデプロイ → ウェブアプリ
+// 4. シートを追加し「閲覧ログ」にリネーム、1行目に以下のヘッダーを入力:
+//    A1: 日時 / B1: メールアドレス / C1: 会社名 / D1: 名前 / E1: 資料名
+// 5. 拡張機能 → Apps Script を開く
+// 6. このコードを貼り付けて保存
+// 7. デプロイ → 新しいデプロイ → ウェブアプリ
 //    - 実行するユーザー: 自分
 //    - アクセス: 全員
-// 7. デプロイURLをコピーし、corporate-slides.html の GAS_URL に設定
+// 8. デプロイURLをコピーし、各HTMLファイルの GAS_URL に設定
 //
 // 【通知先メールアドレスを変更する場合】
 // 下の NOTIFY_EMAIL を変更してください
@@ -26,7 +28,7 @@ function doPost(e) {
   const data = JSON.parse(e.postData.contents);
 
   if (data.action === 'check') {
-    return checkEmail(sheet, data.email);
+    return checkEmail(sheet, data.email, data.source || '不明');
   }
 
   if (data.action === 'request') {
@@ -36,23 +38,31 @@ function doPost(e) {
   return jsonResponse({ status: 'error', message: 'Unknown action' });
 }
 
-function checkEmail(sheet, email) {
+function checkEmail(sheet, email, source) {
   const approved = sheet.getSheetByName('承認済み');
   const emails = approved.getRange('A2:A' + approved.getLastRow()).getValues().flat();
   const found = emails.some(e => e.toString().toLowerCase().trim() === email.toLowerCase().trim());
 
   if (found) {
-    // 最終閲覧日時を更新
     const row = emails.findIndex(e => e.toString().toLowerCase().trim() === email.toLowerCase().trim()) + 2;
-    approved.getRange(row, 6).setValue(new Date());
-
-    // 閲覧通知
     const name = approved.getRange(row, 3).getValue();
     const company = approved.getRange(row, 2).getValue();
+    const now = new Date();
+
+    // 最終閲覧日時を更新
+    approved.getRange(row, 6).setValue(now);
+
+    // 閲覧ログに追記
+    const log = sheet.getSheetByName('閲覧ログ');
+    if (log) {
+      log.appendRow([now, email, company, name, source]);
+    }
+
+    // 閲覧通知
     MailApp.sendEmail({
       to: NOTIFY_EMAIL,
-      subject: `【Resta】${company} ${name} 様が会社説明資料を閲覧しました`,
-      body: `${company} の ${name} 様が会社説明資料にアクセスしました。\n\n日時: ${new Date().toLocaleString('ja-JP')}\nメール: ${email}`
+      subject: `【Resta】${company} ${name} 様が「${source}」を閲覧しました`,
+      body: `${company} の ${name} 様が「${source}」にアクセスしました。\n\n日時: ${now.toLocaleString('ja-JP')}\nメール: ${email}`
     });
 
     return jsonResponse({ status: 'ok', approved: true });

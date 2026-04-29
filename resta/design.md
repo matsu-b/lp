@@ -39,17 +39,29 @@ CSS変数として `:root` に定義。
 
 - **フォント**: `-apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif`
 - **レスポンシブ**: 全箇所 `clamp()` で可変
+- **基本方針**: 商談・対面プレゼンで遠目からでも読めるよう、全体的に大胆な大きめ設定
 
 | 役割 | サイズ |
 |------|--------|
-| タイトルロゴ（H1） | `clamp(60px, 8vw, 120px)` |
-| スライド見出し（H2） | `clamp(30px, 3.8vw, 56px)` |
-| スライドラベル | `clamp(11px, 1.1vw, 14px)` |
-| ミッションリード | `clamp(22px, 2.8vw, 38px)` |
-| カード見出し | `clamp(16px, 1.8vw, 22px)` |
-| カード本文 | `clamp(13px, 1.2vw, 15px)` |
+| タイトルロゴ（H1） | `clamp(80px, 10vw, 160px)` |
+| タイトルeyebrow | `clamp(15px, 1.5vw, 20px)` |
+| タイトルtagline | `clamp(20px, 2.5vw, 32px)` |
+| スライド見出し（H2） | `clamp(40px, 4.8vw, 72px)` |
+| スライドラベル | `clamp(14px, 1.4vw, 18px)` |
+| ミッションリード | `clamp(28px, 3.4vw, 48px)` |
+| ミッションサブ | `clamp(17px, 1.6vw, 22px)` |
+| カード見出し | `clamp(20px, 2.2vw, 28px)` |
+| カード本文 | `clamp(16px, 1.5vw, 19px)` |
+| Info table 値 | `clamp(17px, 1.6vw, 22px)` |
+| 三角ノードラベル | `clamp(22px, 2.4vw, 28px)` |
+| Offerサービス名 | `clamp(22px, 2.6vw, 32px)` |
+| Caseディテール | `clamp(16px, 1.5vw, 19px)` |
+| プロフィール名 | `32px` |
+| プロフィール経歴 | `16px` |
 
 **見出しのグラデーション**: `.slide-heading span` にティール系グラデ（135度）
+
+**スライドコンテナ**: `.slide-content` の `max-width` は `1280px`（大きめフォントを受けて拡張）
 
 ---
 
@@ -113,7 +125,7 @@ CSS変数として `:root` に定義。
 
 ### 三角循環図（`.triangle-diagram`）
 
-**構造**: 520×460pxの絶対配置エリア
+**構造**: 620×520pxの絶対配置エリア（SVG viewBoxも `0 0 620 520`）
 
 - `.tri-node.top` → 事業（ティールボーダー）
 - `.tri-node.left` → 人・組織（オレンジボーダー）
@@ -128,8 +140,21 @@ CSS変数として `:root` に定義。
 - 線の色: `rgba(色, 0.4)`、矢印: `rgba(色, 0.7)`
 
 **提供領域スライド用のミニ三角図**（`.offer-tri-mini`）
-- 340×300pxの縮小版を左カラムに配置
+- 400×360pxの縮小版を左カラムに配置
 - 右カラムに3サービスのリスト（`.offer-list`）
+
+### Positioning図（`.positioning-flow`）
+
+立ち位置スライド（10枚目）専用の横フロー図。
+
+- 7カラムGrid: `1.1fr 0.5fr 1fr 0.5fr 1fr 0.5fr 1fr`
+- 構成: `Solutions → Resta → Client → People`
+- 各ボックスの色分け:
+  - Resta = ティール（`--accent`） + glow
+  - Client = パープル（`--purple`）
+  - People = オレンジ（`--orange`）
+- 矢印は `.pos-arrow-line`（グラデの細線 + CSS三角の先端）
+- 下部に `.pos-message` ボックスでメッセージを強調
 
 ### レポート図（`.report-grid`）
 - 3カラムのアイコン+ラベル形式
@@ -162,7 +187,7 @@ CSS変数として `:root` に定義。
 
 ### ボトムナビ（`#nav`）
 - fixed底部中央、backdrop-blur
-- 「←」「N / 9」「→」
+- 「←」「N / 10」「→」
 - キーボード: ← / → / space で遷移
 
 ### 右上ドット（`#dots`）
@@ -194,7 +219,7 @@ CSS変数として `:root` に定義。
 
 ---
 
-## スライド構成（全9枚）
+## スライド構成（全10枚）
 
 | # | ID | タイトル | 主要コンポーネント |
 |---|-----|----------|---------------------|
@@ -206,7 +231,8 @@ CSS変数として `:root` に定義。
 | 6 | Case Study — Marketing | マーケティング事例 | `.case-cards` × 4 |
 | 7 | Case Study — AI / DX | AI・DX事例 | `.case-cards` × 2 |
 | 8 | Case Study — Retention | 人材定着事例 | `.case-cards` × 1 + `.report-grid` |
-| 9 | Contact | グロースのためのミッション、ご用命ください | `.contact-box` + 日程調整ボタン |
+| 9 | Our Positioning | Restaの立ち位置 | `.positioning-flow` + `.pos-message` |
+| 10 | Contact | グロースのためのミッション、ご用命ください | `.contact-box` + 日程調整ボタン |
 
 ---
 
@@ -215,7 +241,7 @@ CSS変数として `:root` に定義。
 ### 新規スライド追加
 1. `<div class="slide">` ブロックを `#slides` 内に追加
 2. ナビの「N / 9」は自動計算されるため不要（JSが`slides.length`で自動更新）
-3. カウンタ初期値 `1 / 9` だけは合計枚数に合わせて修正
+3. カウンタ初期値 `1 / 10` だけは合計枚数に合わせて修正
 
 ### 色を使う際のルール
 - 事業・売上関連 → ティール
