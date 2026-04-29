@@ -21,7 +21,7 @@
 // 下の NOTIFY_EMAIL を変更してください
 // ============================================================
 
-const NOTIFY_EMAIL = 'matsubara@r-sta.com'; // 通知先
+const NOTIFY_EMAIL = 'tadashi.matsubara+slide@r-sta.com'; // 通知先
 
 function doPost(e) {
   const sheet = SpreadsheetApp.getActiveSpreadsheet();
