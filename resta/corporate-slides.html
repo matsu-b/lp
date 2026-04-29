@@ -898,77 +898,72 @@
     body { overflow: hidden; }
 
     .slide {
-      padding: 24px 20px 80px;
-      justify-content: flex-start;
-      padding-top: 48px;
+      padding: 64px 18px 88px;
+    }
+
+    .slide-title {
+      padding: 48px 18px 88px;
     }
 
     .slide-content {
       overflow-y: auto;
-      max-height: calc(100vh - 120px);
+      max-height: calc(100vh - 152px);
+      -webkit-overflow-scrolling: touch;
       padding-right: 4px;
     }
     .slide-content::-webkit-scrollbar { width: 3px; }
     .slide-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
 
-    .slide-title {
-      justify-content: center;
-      padding-top: 0;
-    }
+    .slide-title h1 { font-size: clamp(56px, 13vw, 80px); }
+    .slide-title .tagline { font-size: clamp(15px, 3.5vw, 20px); margin-bottom: 32px; }
 
-    .slide-title h1 { font-size: clamp(56px, 14vw, 80px); }
-    .slide-title .tagline { font-size: clamp(16px, 4vw, 22px); }
+    .slide-heading { font-size: clamp(26px, 6.5vw, 38px); margin-bottom: 20px; }
+    .slide-label { margin-bottom: 10px; }
 
-    .slide-heading { font-size: clamp(28px, 7vw, 42px); margin-bottom: 24px; }
-    .slide-label { margin-bottom: 12px; }
+    #logo-top { top: 16px; left: 18px; font-size: 20px; }
 
-    /* グリッド → 1カラム */
-    .profile-layout,
-    .case-cards,
-    .report-grid {
-      grid-template-columns: 1fr !important;
-    }
+    /* プロフィール */
+    .profile-layout { grid-template-columns: 1fr; gap: 20px; }
 
-    .case-card {
-      grid-template-columns: 1fr !important;
-    }
+    /* ケーススタディ */
+    .case-card { grid-template-columns: 1fr; }
     .case-who {
       border-right: none;
       border-bottom: 1px solid var(--border);
       padding-right: 0;
-      padding-bottom: 16px;
-      margin-bottom: 8px;
+      padding-bottom: 14px;
+      margin-bottom: 6px;
     }
 
-    /* offer-layout */
-    .offer-layout {
-      grid-template-columns: 1fr !important;
-    }
+    /* Offer */
+    .offer-layout { grid-template-columns: 1fr; gap: 24px; }
     .offer-tri-mini { display: none; }
 
     /* 三角図 */
-    .triangle-wrap { overflow: hidden; }
+    .triangle-wrap {
+      height: 290px;
+      overflow: hidden;
+      align-items: flex-start;
+    }
     .triangle-diagram {
       transform: scale(0.55);
       transform-origin: top center;
-      margin-bottom: -220px;
     }
 
-    /* positioning-flow */
-    .positioning-flow {
-      grid-template-columns: 1fr !important;
-      gap: 8px;
-    }
+    /* レポートグリッド（3列を維持） */
+    .report-grid { grid-template-columns: repeat(3, 1fr); }
+
+    /* positioning */
+    .positioning-flow { grid-template-columns: 1fr !important; gap: 8px; }
     .pos-arrow { display: none; }
     .pos-solution-list { flex-direction: row; flex-wrap: wrap; gap: 6px; }
-    .pos-solution-item { flex: 1; min-width: 120px; }
+    .pos-solution-item { flex: 1; min-width: 100px; }
+    .pos-message { margin-top: 16px; }
 
     /* ナビ */
-    #nav { padding: 14px 28px; bottom: 20px; }
-    .nav-btn { font-size: 28px; padding: 6px 14px; }
+    #nav { padding: 12px 28px; bottom: 16px; }
+    .nav-btn { font-size: 28px; padding: 8px 14px; }
     #slide-counter { font-size: 17px; }
-
-    /* ドット非表示（スペース確保） */
     #dots { display: none !important; }
 
     /* 認証フォーム */
@@ -1596,12 +1591,19 @@
     if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
   });
 
-  // スワイプ対応
+  // スワイプ対応（縦スクロールと区別）
   let touchStartX = 0;
-  document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+  let touchStartY = 0;
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].clientX;
+    touchStartY = e.changedTouches[0].clientY;
+  }, { passive: true });
   document.addEventListener('touchend', e => {
     const dx = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(dx) > 40) goTo(dx < 0 ? current + 1 : current - 1);
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+      goTo(dx < 0 ? current + 1 : current - 1);
+    }
   }, { passive: true });
 </script>
 
