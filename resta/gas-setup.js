@@ -112,11 +112,31 @@ function saveRequest(sheet, data) {
     </div>
   `;
 
-  MailApp.sendEmail({
-    to: NOTIFY_EMAIL,
-    subject: `【Resta】閲覧リクエスト: ${data.company} ${data.name} 様`,
-    htmlBody: htmlBody
-  });
+  const plainBody = [
+    '会社説明資料の閲覧リクエストがありました。',
+    '',
+    `会社名: ${data.company}`,
+    `名前: ${data.name}`,
+    `役職: ${data.title}`,
+    `メール: ${data.email}`,
+    `電話番号: ${data.phone}`,
+    `申し送り事項: ${data.note || 'なし'}`,
+    '',
+    `日時: ${now.toLocaleString('ja-JP')}`,
+    '',
+    `承認URL: ${approveUrl}`
+  ].join('\n');
+
+  try {
+    MailApp.sendEmail({
+      to: NOTIFY_EMAIL,
+      subject: `【Resta】閲覧リクエスト: ${data.company} ${data.name} 様`,
+      body: plainBody,
+      htmlBody: htmlBody
+    });
+  } catch (err) {
+    console.error('Mail send failed:', err);
+  }
 
   return jsonResponse({ status: 'ok' });
 }
