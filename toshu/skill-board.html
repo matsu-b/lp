@@ -367,6 +367,67 @@
     .delta-badge.delta-negative { background: #450A0A; color: #F87171; }
     .cleared-cell { font-size: 14px; font-weight: 500; }
 
+    /* --- Guide --- */
+    .guide-section {
+      padding: 8px 24px 40px;
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+    .guide-section h2 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #E2E8F0;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #1E293B;
+    }
+    .guide-section h2:first-of-type { margin-top: 8px; }
+    .guide-section p {
+      font-size: 14px;
+      color: #CBD5E1;
+      margin-bottom: 12px;
+    }
+    .guide-section ul, .guide-section ol {
+      padding-left: 22px;
+      margin-bottom: 12px;
+    }
+    .guide-section li {
+      font-size: 14px;
+      color: #CBD5E1;
+      margin-bottom: 6px;
+    }
+    .guide-section strong { color: #E2E8F0; }
+    .guide-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    .guide-table th, .guide-table td {
+      padding: 8px 12px;
+      text-align: left;
+      border-bottom: 1px solid #1E293B;
+      color: #CBD5E1;
+    }
+    .guide-table th {
+      color: #94A3B8;
+      font-weight: 500;
+      font-size: 12px;
+      background: #0F172A;
+    }
+    .guide-note {
+      font-size: 13px;
+      color: #94A3B8;
+      background: #0F172A;
+      border-left: 3px solid #3B82F6;
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      margin: 12px 0;
+    }
+    .guide-small { font-size: 12px; color: #64748B; }
+
     /* --- Error --- */
     .error-msg {
       padding: 40px 24px;
@@ -382,6 +443,7 @@
       .individual-summary { padding: 0 16px 12px; }
       .items-section { padding: 0 16px 16px; }
       .overview-section { padding: 0 16px 16px; }
+      .guide-section { padding: 8px 16px 24px; }
       .summary-card { min-width: 100%; }
     }
   </style>
@@ -406,6 +468,7 @@
       <div class="tab-bar">
         <button class="tab-btn active" data-tab="individual" onclick="switchTab('individual')">個人ページ</button>
         <button class="tab-btn" data-tab="overview" onclick="switchTab('overview')">全体比較</button>
+        <button class="tab-btn" data-tab="guide" onclick="switchTab('guide')">使い方</button>
       </div>
     </div>
 
@@ -437,6 +500,85 @@
         </div>
       </div>
       <div id="overview-content"></div>
+    </div>
+
+    <!-- Guide View -->
+    <div id="view-guide" style="display:none">
+      <div class="guide-section">
+
+        <h2>このボードはなに？</h2>
+        <p>自分が今どのレベルにいて、次になにを覚えればランクが上がるかを見えるようにしたボード。</p>
+        <p>「自分は今どこ？」「次は何をがんばる？」がひと目でわかる。</p>
+
+        <h2>ランクは6段階</h2>
+        <p>下から上に上がっていく。</p>
+        <table class="guide-table">
+          <thead>
+            <tr><th>ランク</th><th>よびかた</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="rank-badge small rank-E">E</span></td><td>見習い</td></tr>
+            <tr><td><span class="rank-badge small rank-D">D</span></td><td>平</td></tr>
+            <tr><td><span class="rank-badge small rank-C">C</span></td><td>中堅</td></tr>
+            <tr><td><span class="rank-badge small rank-B">B</span></td><td>一人前</td></tr>
+            <tr><td><span class="rank-badge small rank-A">A</span></td><td>熟練者</td></tr>
+            <tr><td><span class="rank-badge small rank-S">S</span></td><td>統括者</td></tr>
+          </tbody>
+        </table>
+        <p class="guide-small">※ 各ランクの中身（どんな仕事ができれば一人前か、など）は別途定義あり。</p>
+
+        <h2>評価のマーク（◯ △ ✕）</h2>
+        <p>ひとつひとつの項目に、こんなマークがつく。</p>
+        <ul>
+          <li><strong class="mark-ok">◯</strong> … ひとりでできる</li>
+          <li><strong class="mark-partial">△</strong> … おそらくできる（まだしっかり確認できていない）</li>
+          <li><strong class="mark-ng">✕</strong> … まだできない</li>
+          <li><strong class="mark-empty">—（マークなし）</strong> … まだ見てない</li>
+        </ul>
+
+        <h2>ランクが上がる条件</h2>
+        <p>そのランクに用意された項目のうち、</p>
+        <ol>
+          <li><strong>9割を ◯ にすること</strong></li>
+          <li><strong>「必達」マークの項目は ぜんぶ ◯ にすること</strong></li>
+        </ol>
+        <p>この2つを両方クリアできたら、次のランクに上がる。</p>
+        <div class="guide-note">例：Cランクの項目が10個あったら、9個以上◯ ＋ 必達はすべて◯。</div>
+
+        <h2>「必達」って？</h2>
+        <p>そのランクで <strong>絶対に できてないといけない項目</strong>。</p>
+        <p>ここが ✕ や △ のままだと、ほかが何個◯でもランクは上がらない。<br>（最初にここをつぶすのが近道）</p>
+
+        <h2>評価のタイミング</h2>
+        <p><strong>3か月に1回</strong>、評価をおこなう。</p>
+        <p>つまり、3か月ごとに自分のランクが見直される。</p>
+
+        <h2>自分のページの見方</h2>
+        <p><strong>上のカード</strong></p>
+        <ul>
+          <li>今の自分のランク</li>
+          <li>◯ △ ✕ の数</li>
+          <li>次のランクまで あと何個 ◯ にすればいいか</li>
+        </ul>
+        <p><strong>下の表</strong></p>
+        <ul>
+          <li>どの工程の、どの項目が ◯／△／✕ か</li>
+          <li>「必達」がどれかも見える</li>
+        </ul>
+
+        <h2>次になにをすればいい？</h2>
+        <ol>
+          <li>自分のページを開く</li>
+          <li>「次のランクまであと◯個」を見る</li>
+          <li>表のなかで △ や ✕ になっている項目をさがす</li>
+          <li><strong>「必達」がついてるものから先につぶす</strong></li>
+          <li>わからないことは、先輩・親方に聞く</li>
+        </ol>
+
+        <h2>全体比較タブ</h2>
+        <p>みんなの今のランクと、前回からどれだけ伸びたかが見える。</p>
+
+      </div>
     </div>
   </div>
 
@@ -824,6 +966,7 @@ function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   document.getElementById('view-individual').style.display = tab === 'individual' ? 'block' : 'none';
   document.getElementById('view-overview').style.display = tab === 'overview' ? 'block' : 'none';
+  document.getElementById('view-guide').style.display = tab === 'guide' ? 'block' : 'none';
 
   if (tab === 'overview') onOverviewChange();
 }
