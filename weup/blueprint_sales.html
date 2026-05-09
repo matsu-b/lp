@@ -447,6 +447,26 @@
       margin-top: 24px;
     }
 
+    .subsection-title {
+      margin: 30px 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--bp-primary);
+      font-size: 15px;
+      line-height: 1.45;
+      font-weight: 900;
+    }
+
+    .subsection-title::before {
+      content: "";
+      width: 5px;
+      height: 24px;
+      border-radius: var(--bp-radius-pill);
+      background: var(--bp-secondary);
+      flex: 0 0 auto;
+    }
+
     .why-item {
       padding: 12px;
       display: grid;
@@ -1045,6 +1065,14 @@
         grid-template-columns: repeat(2, 1fr);
         gap: 16px;
       }
+      .subsection-title {
+        margin: 52px 0 24px;
+        font-size: 22px;
+      }
+      .subsection-title::before {
+        width: 6px;
+        height: 28px;
+      }
       .why-item { padding: 20px; grid-template-columns: 38px 1fr; }
       .why-icon,
       .support-icon {
@@ -1236,6 +1264,7 @@
           </article>
         </div>
 
+        <h3 class="subsection-title">なぜ第二種電気工事士なのか</h3>
         <div class="why-list">
           <div class="why-item"><div class="why-icon">↗</div><div><strong>有効求人倍率が高い</strong><span>人材不足の業界だからこそ、働き手の立場が強くなりやすい。</span></div></div>
           <div class="why-item"><div class="why-icon">守</div><div><strong>AIに代替されにくい</strong><span>現場作業は物理的・技術的スキルが必要で、将来も需要が続きます。</span></div></div>
@@ -1245,6 +1274,7 @@
           <div class="why-item"><div class="why-icon">上</div><div><strong>上位資格へ進める</strong><span>資格の積み上げで、年収と選択肢を広げ続けられます。</span></div></div>
         </div>
 
+        <h3 class="subsection-title">キャリアの 3 ステップ</h3>
         <div class="step-panel" aria-label="キャリアの3ステップ">
           <div class="step-heads">
             <div class="step-head">STEP 1</div>
