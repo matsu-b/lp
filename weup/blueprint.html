@@ -6,141 +6,1057 @@
   <title>BLUEPRINT Mobile Blueprint</title>
   <style>
     :root {
-      --bp-blue: #174ea6;
-      --bp-blue-2: #1f5fc6;
-      --bp-sky: #eef4ff;
-      --bp-bg: #f4f7fc;
-      --bp-text: #13233f;
-      --bp-muted: #5a6f96;
-      --bp-line: #d9e4f7;
-      --bp-yellow: #f5be2f;
-      --bp-yellow-deep: #ecac00;
-      --radius: 14px;
-      --shadow: 0 8px 20px rgba(19,35,63,.08);
+      --blue-900: #00326e;
+      --blue-800: #004792;
+      --blue-700: #0759b8;
+      --blue-600: #1c73d8;
+      --blue-100: #eaf3ff;
+      --blue-050: #f4f8ff;
+      --text: #102a4d;
+      --muted: #55708e;
+      --line: #c9def6;
+      --yellow: #ffc22b;
+      --yellow-2: #f5a900;
+      --white: #fff;
+      --shadow: 0 10px 24px rgba(0, 55, 118, .12);
+      --radius: 8px;
     }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      background: var(--bp-bg);
-      color: var(--bp-text);
-      font-family: "Noto Sans JP", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #dfe8f6;
+      color: var(--text);
+      font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo, -apple-system, BlinkMacSystemFont, sans-serif;
+      letter-spacing: 0;
     }
-    .phone { max-width: 390px; margin: 0 auto; background: #fff; min-height: 100dvh; padding-bottom: 88px; }
+
+    img { display: block; max-width: 100%; }
+    button { font: inherit; }
+
+    .phone {
+      max-width: 390px;
+      min-height: 100dvh;
+      margin: 0 auto;
+      overflow: hidden;
+      background: var(--white);
+    }
+
     .header {
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--bp-line);
-      display: flex; justify-content: space-between; align-items: center;
+      height: 34px;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--white);
+      border-bottom: 1px solid #edf2f8;
     }
-    .logo { font-weight: 900; letter-spacing: .02em; color: var(--bp-blue); }
-    .mini-btn { font-size: 11px; color: white; background: var(--bp-blue); border:0; padding: 7px 10px; border-radius: 99px; }
+
+    .logo {
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--blue-900);
+      line-height: 1;
+    }
+
+    .header-note {
+      flex: 1;
+      margin-left: 8px;
+      color: #6c819c;
+      font-size: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .header-cta {
+      min-width: 72px;
+      min-height: 18px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--blue-900);
+      color: var(--white);
+      font-size: 7px;
+      font-weight: 800;
+    }
 
     .hero {
-      background: linear-gradient(180deg, #ffffff 0%, #edf3ff 100%);
-      padding: 20px 16px 18px;
+      position: relative;
+      min-height: 198px;
+      display: grid;
+      grid-template-columns: 1fr 1.35fr 1fr;
+      align-items: stretch;
+      background: linear-gradient(180deg, #f4f9ff 0%, #dbeeff 100%);
+      border-bottom: 3px solid #d9e9fb;
     }
-    .hero h1 { font-size: 33px; line-height: 1.28; margin: 8px 0 8px; color: var(--bp-blue); }
-    .hero p { margin: 0; color: var(--bp-muted); font-size: 13px; }
-    .catch { font-size: 12px; color: var(--bp-blue-2); font-weight: 700; }
+
+    .hero-photo {
+      min-height: 198px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .hero-photo.left {
+      background-image: linear-gradient(90deg, rgba(0, 46, 100, .15), rgba(255,255,255,.15)), url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=560&q=80");
+    }
+
+    .hero-photo.right {
+      background-image: linear-gradient(270deg, rgba(0, 46, 100, .08), rgba(255,255,255,.25)), url("https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=560&q=80");
+    }
+
+    .hero-copy {
+      z-index: 1;
+      padding: 26px 0 18px;
+      text-align: center;
+      background: linear-gradient(90deg, rgba(255,255,255,.35), rgba(255,255,255,.98) 18%, rgba(255,255,255,.98) 82%, rgba(255,255,255,.35));
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--blue-700);
+      font-size: 9px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--blue-900);
+      font-size: 25px;
+      line-height: 1.34;
+      font-weight: 900;
+    }
 
     .cta {
-      width: 100%; border: 0; border-radius: 999px; padding: 13px 16px;
-      color: #103063; font-weight: 900; font-size: 14px;
-      background: linear-gradient(180deg,var(--bp-yellow),var(--bp-yellow-deep));
-      box-shadow: inset 0 -2px 0 rgba(0,0,0,.15);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 27px;
+      padding: 0 22px;
+      border: 0;
+      border-radius: 999px;
+      color: #0f3972;
+      background: linear-gradient(180deg, var(--yellow), var(--yellow-2));
+      box-shadow: inset 0 -2px 0 rgba(128, 73, 0, .22), 0 5px 10px rgba(0, 60, 130, .12);
+      font-size: 9px;
+      font-weight: 900;
+      white-space: nowrap;
     }
 
-    .section { padding: 28px 16px; }
-    .section.alt { background: var(--bp-sky); }
-    .title { text-align: center; margin: 0 0 14px; font-size: 24px; color: var(--bp-blue); line-height: 1.35; }
-    .sub { text-align: center; margin: -4px 0 16px; color: var(--bp-muted); font-size: 12px; }
+    .hero .cta { margin-top: 17px; }
 
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-    .chip { padding: 6px 10px; border-radius: 8px; background: var(--bp-blue); color: #fff; font-size: 12px; font-weight: 700; }
+    .section {
+      padding: 38px 18px;
+      background: var(--white);
+    }
 
-    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .card { background:#fff; border:1px solid var(--bp-line); border-radius: 10px; padding: 12px; box-shadow: var(--shadow); }
-    .card h3 { margin: 0 0 6px; font-size: 13px; color: var(--bp-blue); }
-    .card p { margin: 0; font-size: 12px; color: var(--bp-muted); line-height: 1.55; }
+    .section.tint {
+      background: var(--blue-100);
+    }
 
-    .steps { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-    .step { border:1px solid var(--bp-line); border-radius:10px; overflow:hidden; background:#fff; }
-    .step b { display:block; text-align:center; background:var(--bp-blue); color:#fff; font-size:11px; padding:5px; }
-    .step:nth-child(2) b { background:#2f77de; }
-    .step:nth-child(3) b { background:#f1b022; color:#173264; }
-    .step span { display:block; padding:8px; text-align:center; font-size:11px; color:var(--bp-text); }
+    .section.dark {
+      position: relative;
+      padding: 44px 22px 36px;
+      color: var(--white);
+      background:
+        linear-gradient(180deg, rgba(0, 57, 128, .82), rgba(0, 40, 92, .92)),
+        url("https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=780&q=80") center/cover;
+    }
 
-    .price {
-      background: #fff; border: 1px solid var(--bp-line); border-radius: 12px;
-      max-width: 270px; margin: 0 auto; text-align:center; padding: 16px 14px;
+    .section-title {
+      margin: 0 0 18px;
+      color: var(--blue-900);
+      text-align: center;
+      font-size: 16px;
+      line-height: 1.45;
+      font-weight: 900;
+    }
+
+    .section-title.large { font-size: 18px; }
+    .section-title .small { display: block; font-size: 10px; }
+    .section.dark .section-title { color: var(--white); }
+
+    .lead {
+      margin: -8px auto 20px;
+      max-width: 280px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 9px;
+      line-height: 1.8;
+    }
+
+    .worry-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .worry-card {
+      min-height: 77px;
+      padding: 12px 6px 8px;
+      border-radius: 4px;
+      background: var(--blue-050);
+      text-align: center;
+      border: 1px solid #e2edfa;
+    }
+
+    .icon {
+      width: 25px;
+      height: 25px;
+      margin: 0 auto 8px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--blue-600);
+      border-radius: 50%;
+      color: var(--blue-600);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .worry-card p {
+      margin: 0;
+      color: var(--blue-900);
+      font-size: 7px;
+      line-height: 1.45;
+      font-weight: 800;
+    }
+
+    .solution-title {
+      margin: 0 0 3px;
+      color: var(--blue-900);
+      text-align: center;
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1.45;
+    }
+
+    .brand-name {
+      margin: 0 0 10px;
+      color: var(--blue-900);
+      text-align: center;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .label-row {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin: 0 0 12px;
+    }
+
+    .label {
+      min-height: 24px;
+      padding: 6px 9px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--blue-900);
+      color: var(--white);
+      font-size: 10px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .support-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 0 auto;
+      max-width: 286px;
+    }
+
+    .support-card {
+      min-height: 91px;
+      padding: 13px 8px 10px;
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .support-card h3,
+    .reason-card h3,
+    .career-card h3 {
+      margin: 0;
+      color: var(--blue-900);
+      font-size: 9px;
+      line-height: 1.4;
+      font-weight: 900;
+    }
+
+    .support-card p,
+    .reason-card p,
+    .career-card p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 7px;
+      line-height: 1.55;
+    }
+
+    .steps-panel {
+      max-width: 286px;
+      margin: 0 auto;
+      border-radius: 2px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .step-heads {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .step-head {
+      padding: 6px 0;
+      color: var(--white);
+      text-align: center;
+      font-size: 8px;
+      font-weight: 900;
+      background: var(--blue-700);
+    }
+
+    .step-head:nth-child(2) { background: #3b86d8; }
+    .step-head:nth-child(3) { background: #ff9f27; }
+
+    .step-body {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      padding: 7px;
+    }
+
+    .step-card {
+      text-align: center;
+      border: 1px solid #e6eef8;
+      background: #fff;
+    }
+
+    .step-card img {
+      width: 100%;
+      aspect-ratio: 1.18;
+      object-fit: cover;
+    }
+
+    .step-card h3 {
+      margin: 5px 4px 2px;
+      color: var(--blue-900);
+      font-size: 8px;
+      line-height: 1.35;
+      font-weight: 900;
+    }
+
+    .step-card p {
+      margin: 0 4px 6px;
+      color: var(--muted);
+      font-size: 6px;
+      line-height: 1.35;
+    }
+
+    .step-note {
+      margin: 0;
+      padding: 7px 10px 9px;
+      border-top: 1px solid #e6eef8;
+      color: var(--blue-900);
+      text-align: center;
+      font-size: 8px;
+      font-weight: 800;
+    }
+
+    .reason-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      max-width: 286px;
+      margin: 0 auto;
+    }
+
+    .reason-card {
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      background: var(--white);
+      overflow: hidden;
+    }
+
+    .reason-card img {
+      width: 100%;
+      aspect-ratio: 1.58;
+      object-fit: cover;
+    }
+
+    .reason-card-body { padding: 9px 9px 10px; }
+    .reason-card h3::before,
+    .career-card h3::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      margin-right: 4px;
+      display: inline-block;
+      vertical-align: -2px;
+      border-radius: 50%;
+      background: var(--blue-600);
+    }
+
+    .cta-wrap {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .caption {
+      margin: 8px 0 0;
+      color: var(--muted);
+      text-align: center;
+      font-size: 7px;
+      line-height: 1.4;
+    }
+
+    .license-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 9px;
+      max-width: 276px;
+      margin: 0 auto 24px;
+    }
+
+    .license-card {
+      min-height: 32px;
+      padding: 7px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 3px;
+      background: var(--white);
+      box-shadow: 0 6px 14px rgba(0, 55, 118, .08);
+    }
+
+    .license-card .icon {
+      flex: 0 0 18px;
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      font-size: 8px;
+    }
+
+    .license-card strong {
+      display: block;
+      color: var(--blue-900);
+      font-size: 8px;
+      line-height: 1.25;
+    }
+
+    .license-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 6px;
+    }
+
+    .matrix {
+      max-width: 286px;
+      margin: 0 auto;
+      border-radius: 2px;
+      overflow: hidden;
+      background: var(--white);
+      box-shadow: var(--shadow);
+      font-size: 7px;
+    }
+
+    .matrix-row {
+      display: grid;
+      grid-template-columns: 1.1fr repeat(4, .9fr);
+      min-height: 25px;
+      border-bottom: 1px solid #e7eef8;
+    }
+
+    .matrix-row:last-child { border-bottom: 0; }
+    .matrix-row > div {
+      padding: 7px 5px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border-right: 1px solid #e7eef8;
+    }
+    .matrix-row > div:last-child { border-right: 0; }
+    .matrix-row.head > div {
+      color: var(--blue-900);
+      background: #f6f9fe;
+      font-weight: 900;
+    }
+    .matrix-row > div.check {
+      color: var(--blue-600);
+      font-weight: 900;
+    }
+    .matrix-row > div.featured {
+      background: #3a86ee;
+      color: var(--white);
+      font-weight: 900;
+    }
+
+    .flow {
+      max-width: 300px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 24px 1fr 52px;
+      gap: 4px;
+      align-items: stretch;
+    }
+
+    .flow-side {
+      display: grid;
+      place-items: center;
+      color: var(--white);
+      background: var(--blue-800);
+      font-size: 9px;
+      font-weight: 900;
+      writing-mode: vertical-rl;
+      border-radius: 3px;
+    }
+
+    .flow-main {
+      display: grid;
+      grid-template-rows: 25px 1fr;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .flow-head {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      color: var(--white);
+      text-align: center;
+      font-size: 7px;
+      font-weight: 900;
+    }
+    .flow-head div { display: grid; place-items: center; background: var(--blue-700); }
+    .flow-head div:nth-child(2) { background: #367dd5; }
+    .flow-head div:nth-child(3) { background: #63a8ee; }
+
+    .flow-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+      padding: 5px;
+    }
+
+    .flow-cell {
+      min-height: 34px;
+      padding: 5px 3px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      background: var(--blue-050);
+      border: 1px solid #dceafd;
+      color: var(--blue-900);
+      font-size: 6px;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    .flow-support {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+      margin-top: 3px;
+    }
+
+    .flow-support div {
+      min-height: 108px;
+      display: grid;
+      place-items: center;
+      background: var(--blue-700);
+      color: var(--white);
+      font-size: 8px;
+      font-weight: 900;
+      writing-mode: vertical-rl;
+      border-radius: 2px;
+    }
+
+    .flow-career {
+      display: grid;
+      grid-template-rows: 25px 1fr;
+      border-radius: 3px;
+      overflow: hidden;
+      background: #ffcf45;
+    }
+
+    .flow-career strong {
+      display: grid;
+      place-items: center;
+      background: #ffbd1d;
+      color: var(--blue-900);
+      font-size: 8px;
+    }
+
+    .flow-career span {
+      display: grid;
+      place-items: center;
+      padding: 4px;
+      text-align: center;
+      color: var(--blue-900);
+      font-size: 6px;
+      line-height: 1.5;
+      font-weight: 800;
+    }
+
+    .career-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      max-width: 286px;
+      margin: 0 auto;
+    }
+
+    .career-card {
+      min-height: 150px;
+      padding: 12px 11px;
+      border-radius: 5px;
+      background: var(--white);
       box-shadow: var(--shadow);
     }
-    .price .amount { font-size: 42px; line-height: 1; font-weight: 900; color: var(--bp-blue); }
-    .price .yen { font-size: 22px; font-weight: 900; }
 
-    .sticky {
-      position: fixed; left: 50%; transform: translateX(-50%); bottom: 0;
-      width: min(390px,100%); padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-      background: rgba(255,255,255,.95); border-top: 1px solid var(--bp-line); backdrop-filter: blur(6px);
+    .career-tag {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      color: var(--blue-700);
+      background: var(--blue-050);
+      font-size: 7px;
+      font-weight: 900;
     }
+
+    .salary {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .salary div {
+      padding: 7px 3px;
+      text-align: center;
+      background: #f5f9ff;
+      border-radius: 4px;
+      color: var(--blue-900);
+      font-size: 6px;
+      line-height: 1.35;
+    }
+    .salary strong {
+      display: block;
+      color: var(--blue-700);
+      font-size: 15px;
+      line-height: 1.2;
+    }
+
+    .price-box {
+      max-width: 212px;
+      margin: 0 auto;
+      padding: 18px 16px 14px;
+      background: var(--white);
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .price-label {
+      display: inline-block;
+      margin-bottom: 9px;
+      padding: 5px 16px;
+      border-radius: 999px;
+      background: var(--blue-100);
+      color: var(--blue-700);
+      font-size: 9px;
+      font-weight: 900;
+    }
+
+    .price-main {
+      color: var(--blue-900);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .price-main strong {
+      font-size: 35px;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .price-main small {
+      font-size: 15px;
+    }
+
+    .checks {
+      margin: 13px auto 14px;
+      padding: 0;
+      width: fit-content;
+      color: var(--blue-700);
+      text-align: left;
+      font-size: 8px;
+      line-height: 1.8;
+      font-weight: 800;
+      list-style: none;
+    }
+
+    .checks li::before { content: "✓ "; }
+
+    .note-box {
+      margin-top: 13px;
+      padding: 10px;
+      background: var(--blue-050);
+      color: var(--muted);
+      text-align: left;
+      font-size: 6px;
+      line-height: 1.55;
+    }
+
+    .guarantee {
+      max-width: 232px;
+      margin: 26px auto 0;
+      padding: 18px 16px;
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      gap: 12px;
+      align-items: center;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .shield {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--blue-700);
+      border-radius: 50%;
+      color: var(--blue-700);
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .guarantee h3 {
+      margin: 0 0 5px;
+      color: var(--blue-900);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .guarantee p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 7px;
+      line-height: 1.55;
+    }
+
+    .final-copy {
+      max-width: 260px;
+      margin: 0 auto;
+      text-align: center;
+      font-size: 10px;
+      line-height: 2;
+      font-weight: 700;
+    }
+
+    .final-copy strong {
+      display: block;
+      margin: 20px 0 8px;
+      font-size: 15px;
+      line-height: 1.65;
+      font-weight: 900;
+    }
+
+    .footer {
+      padding: 10px 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #061a35;
+      color: var(--white);
+    }
+    .footer .logo { color: var(--white); }
+    .footer small { color: #a9bad0; font-size: 6px; }
   </style>
 </head>
 <body>
   <main class="phone">
     <header class="header">
       <div class="logo">BLUEPRINT</div>
-      <button class="mini-btn">無料カウンセリング</button>
+      <div class="header-note">現場職・資格取得・キャリア支援スクール</div>
+      <button class="header-cta">無料相談はこちら</button>
     </header>
 
     <section class="hero">
-      <p class="catch">AIに負けないスキルを、手に入れよう</p>
-      <h1>現場職特化の<br>資格取得・転職<br>キャリアスクール</h1>
-      <p>PCビューのトーンを維持しつつ、スマホでの読了性とCTA到達率を優先。</p>
-      <div style="margin-top:12px"><button class="cta">無料カウンセリングはこちら</button></div>
+      <div class="hero-photo left" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <p class="eyebrow">AIに奪われないスキルで、手に職をつける</p>
+        <h1>現場職特化の<br>資格取得・転職<br>キャリアスクール</h1>
+        <button class="cta">無料カウンセリングに申し込む</button>
+      </div>
+      <div class="hero-photo right" aria-hidden="true"></div>
     </section>
 
-    <section class="section alt">
-      <h2 class="title">その悩み…BLUEPRINTで解決</h2>
-      <div class="chips">
-        <div class="chip">資格取得</div><div class="chip">キャリア設計</div><div class="chip">転職支援</div>
+    <section class="section">
+      <h2 class="section-title">こんな悩み、ありませんか？</h2>
+      <div class="worry-grid">
+        <article class="worry-card">
+          <div class="icon">?</div>
+          <p>このまま今の仕事を<br>続けていいのか不安</p>
+        </article>
+        <article class="worry-card">
+          <div class="icon">!</div>
+          <p>手に職をつけたいが<br>何から始めればいいか不明</p>
+        </article>
+        <article class="worry-card">
+          <div class="icon">¥</div>
+          <p>収入を上げたいが<br>選べる道が少ない</p>
+        </article>
+        <article class="worry-card">
+          <div class="icon">✓</div>
+          <p>資格を取って<br>転職につなげたい</p>
+        </article>
       </div>
-      <div class="grid2" style="margin-top:12px;">
-        <article class="card"><h3>効率よく学ぶ</h3><p>スキマ時間でも進められる学習設計。</p></article>
-        <article class="card"><h3>実務に繋げる</h3><p>現場で使える内容に絞って習得。</p></article>
+    </section>
+
+    <section class="section tint">
+      <h2 class="solution-title">その悩み、BLUEPRINTで解決できます！</h2>
+      <p class="brand-name">BLUEPRINTは</p>
+      <div class="label-row">
+        <div class="label">資格取得</div>
+        <div class="label">キャリア設計</div>
+        <div class="label">転職支援</div>
+      </div>
+      <p class="lead">をセットでサポートします</p>
+      <div class="support-grid">
+        <article class="support-card">
+          <div class="icon">≡</div>
+          <h3>資格取得</h3>
+          <p>未経験からでも学びやすい教材と学習計画を用意。</p>
+        </article>
+        <article class="support-card">
+          <div class="icon">↗</div>
+          <h3>キャリア設計</h3>
+          <p>将来像から逆算し、必要なスキルを明確化。</p>
+        </article>
+        <article class="support-card">
+          <div class="icon">◇</div>
+          <h3>転職支援</h3>
+          <p>求人選定、書類、面接まで一貫して伴走。</p>
+        </article>
       </div>
     </section>
 
     <section class="section">
-      <h2 class="title">キャリアの3ステップ</h2>
-      <div class="steps">
-        <div class="step"><b>STEP 1</b><span>学習スタート</span></div>
-        <div class="step"><b>STEP 2</b><span>資格取得</span></div>
-        <div class="step"><b>STEP 3</b><span>転職支援</span></div>
+      <h2 class="section-title">キャリアの3ステップ</h2>
+      <div class="steps-panel">
+        <div class="step-heads">
+          <div class="step-head">STEP 1</div>
+          <div class="step-head">STEP 2</div>
+          <div class="step-head">STEP 3</div>
+        </div>
+        <div class="step-body">
+          <article class="step-card">
+            <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=320&q=80" alt="学習する受講生">
+            <h3>基礎を学ぶ</h3>
+            <p>短時間でも進めやすい学習設計。</p>
+          </article>
+          <article class="step-card">
+            <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=320&q=80" alt="資格学習の教材">
+            <h3>資格を取得</h3>
+            <p>試験対策と進捗管理で合格を支援。</p>
+          </article>
+          <article class="step-card">
+            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=320&q=80" alt="転職後に働く人">
+            <h3>転職へ進む</h3>
+            <p>現場職へのキャリアチェンジを伴走。</p>
+          </article>
+        </div>
+        <p class="step-note">学ぶだけで終わらせず、仕事につながるところまで支援します。</p>
       </div>
-    </section>
-
-    <section class="section alt">
-      <h2 class="title">BLUEPRINTが選ばれる4つの理由</h2>
-      <div class="grid2">
-        <article class="card"><h3>現場特化の教材</h3><p>必要な知識に絞り、学習負荷を最適化。</p></article>
-        <article class="card"><h3>伴走サポート</h3><p>講師/メンターの定期フォローを実施。</p></article>
-        <article class="card"><h3>資格取得サポート</h3><p>試験対策から申込までを支援。</p></article>
-        <article class="card"><h3>転職まで一貫支援</h3><p>応募書類、面接、条件交渉まで伴走。</p></article>
-      </div>
-      <div style="margin-top:14px"><button class="cta">無料カウンセリングはこちら</button></div>
     </section>
 
     <section class="section">
-      <h2 class="title">ご利用料金</h2>
-      <p class="sub">最短ルートで成果を出すための実践プラン</p>
-      <div class="price">
-        <div style="font-size:12px;color:var(--bp-muted)">月々</div>
-        <div class="amount">19,167<span class="yen">円〜</span></div>
-        <div style="font-size:12px;color:var(--bp-muted);margin-top:8px;">※詳細はカウンセリングでご案内</div>
-        <div style="margin-top:12px"><button class="cta">無料カウンセリングはこちら</button></div>
+      <h2 class="section-title">BLUEPRINTが選ばれる<br>4つの理由</h2>
+      <div class="reason-grid">
+        <article class="reason-card">
+          <img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=360&q=80" alt="現場で働く技術者">
+          <div class="reason-card-body">
+            <h3>現場に直結した教材</h3>
+            <p>資格取得だけでなく、現場で評価される知識を重点的に学習します。</p>
+          </div>
+        </article>
+        <article class="reason-card">
+          <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=360&q=80" alt="キャリア面談">
+          <div class="reason-card-body">
+            <h3>プロが伴走するサポート</h3>
+            <p>学習計画、進捗、悩みを定期的に確認し、継続しやすくします。</p>
+          </div>
+        </article>
+        <article class="reason-card">
+          <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=360&q=80" alt="資格学習">
+          <div class="reason-card-body">
+            <h3>資格対策から申込まで一気通貫</h3>
+            <p>学習範囲の整理、模擬演習、受験までの手続きをサポート。</p>
+          </div>
+        </article>
+        <article class="reason-card">
+          <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=360&q=80" alt="転職面談">
+          <div class="reason-card-body">
+            <h3>転職まで見据えた支援</h3>
+            <p>応募書類、面接対策、企業選びまでキャリアの実現に寄り添います。</p>
+          </div>
+        </article>
+      </div>
+      <div class="cta-wrap">
+        <button class="cta">無料カウンセリングに申し込む</button>
+        <p class="caption">まずは現在地と目指せるキャリアを整理します。</p>
       </div>
     </section>
+
+    <section class="section tint">
+      <h2 class="section-title">学べる資格</h2>
+      <div class="license-cards">
+        <div class="license-card">
+          <div class="icon">工</div>
+          <div><strong>第二種電気工事士</strong><span>国家資格</span></div>
+        </div>
+        <div class="license-card">
+          <div class="icon">電</div>
+          <div><strong>第一種電気工事士</strong><span>実務経験者向け</span></div>
+        </div>
+        <div class="license-card">
+          <div class="icon">管</div>
+          <div><strong>施工管理技士</strong><span>キャリアアップ</span></div>
+        </div>
+        <div class="license-card">
+          <div class="icon">危</div>
+          <div><strong>危険物取扱者</strong><span>基礎資格</span></div>
+        </div>
+      </div>
+      <div class="matrix">
+        <div class="matrix-row head">
+          <div>資格</div><div>未経験</div><div>学習支援</div><div>転職支援</div><div class="featured">おすすめ</div>
+        </div>
+        <div class="matrix-row">
+          <div>第二種電気工事士</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div><div class="featured">✓</div>
+        </div>
+        <div class="matrix-row">
+          <div>第一種電気工事士</div><div>-</div><div class="check">✓</div><div class="check">✓</div><div class="featured">✓</div>
+        </div>
+        <div class="matrix-row">
+          <div>施工管理技士</div><div>-</div><div class="check">✓</div><div class="check">✓</div><div class="featured">✓</div>
+        </div>
+        <div class="matrix-row">
+          <div>危険物取扱者</div><div class="check">✓</div><div class="check">✓</div><div>-</div><div class="featured">✓</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">BLUEPRINTの全体の流れ</h2>
+      <p class="lead">学習開始から資格取得、転職支援まで、必要な工程をまとめてサポートします。</p>
+      <div class="flow">
+        <div class="flow-side">学習フェーズ</div>
+        <div>
+          <div class="flow-main">
+            <div class="flow-head">
+              <div>基礎学習</div><div>資格対策</div><div>実践準備</div>
+            </div>
+            <div class="flow-grid">
+              <div class="flow-cell">現状診断</div>
+              <div class="flow-cell">個別計画</div>
+              <div class="flow-cell">教材学習</div>
+              <div class="flow-cell">確認テスト</div>
+              <div class="flow-cell">模擬演習</div>
+              <div class="flow-cell">受験準備</div>
+              <div class="flow-cell">面談</div>
+              <div class="flow-cell">書類作成</div>
+              <div class="flow-cell">面接対策</div>
+            </div>
+          </div>
+          <div class="flow-support">
+            <div>専属サポート</div>
+            <div>資格取得支援</div>
+            <div>転職支援</div>
+          </div>
+        </div>
+        <div class="flow-career">
+          <strong>転職</strong>
+          <span>求人紹介<br>応募支援<br>面接対策<br>内定後相談</span>
+        </div>
+      </div>
+      <div class="cta-wrap">
+        <button class="cta">無料カウンセリングに申し込む</button>
+        <p class="caption">あなたに合う進め方を無料でご案内します。</p>
+      </div>
+    </section>
+
+    <section class="section tint">
+      <h2 class="section-title">BLUEPRINTで変わる、<br>あなたのキャリア</h2>
+      <p class="lead">資格と実務理解を武器に、収入アップと安定したキャリアを目指します。</p>
+      <div class="career-grid">
+        <article class="career-card">
+          <span class="career-tag">未経験から</span>
+          <h3>電気工事士・設備保全</h3>
+          <p>生活インフラを支える現場職として、長く働ける技術を身につけます。</p>
+          <div class="salary">
+            <div>平均年収<strong>310</strong>万円〜</div>
+            <div>経験者<strong>450</strong>万円〜</div>
+          </div>
+        </article>
+        <article class="career-card">
+          <span class="career-tag">キャリアアップ</span>
+          <h3>施工管理・管理職</h3>
+          <p>資格と経験を組み合わせ、現場をまとめるポジションを狙います。</p>
+          <div class="salary">
+            <div>平均年収<strong>290</strong>万円〜</div>
+            <div>経験者<strong>550</strong>万円〜</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section tint">
+      <h2 class="section-title">ご利用料金</h2>
+      <div class="price-box">
+        <div class="price-label">分割払いの場合</div>
+        <div class="price-main">月々 <strong>19,167</strong><small>円〜</small></div>
+        <p class="caption">資格取得から転職支援まで、まとめて伴走</p>
+        <ul class="checks">
+          <li>学習サポート</li>
+          <li>資格対策</li>
+          <li>転職・キャリア相談</li>
+        </ul>
+        <button class="cta">無料カウンセリングに申し込む</button>
+        <div class="note-box">
+          料金、支払い方法、対象資格はカウンセリング時に個別にご案内します。状況に応じた最適なプランをご提案します。
+        </div>
+      </div>
+
+      <div class="guarantee">
+        <div class="shield">✓</div>
+        <div>
+          <h3>1週間以内なら<br>全額返金を保証します</h3>
+          <p>開始後に合わないと感じた場合も、安心してご相談いただけます。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section dark">
+      <div class="final-copy">
+        「今のままでいいのか」<br>
+        その不安を、資格とキャリアの一歩に変える。
+        <strong>AIが仕事を奪っていく時代。<br>日本を動かす次の主役は、<br>現場で手を動かす人材。</strong>
+        BLUEPRINTが、あなたの新しいキャリアづくりを支えます。
+      </div>
+      <div class="cta-wrap">
+        <button class="cta">無料カウンセリングに申し込む</button>
+        <p class="caption" style="color:#cfe0f5;">まずは30分、今の悩みを聞かせてください。</p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="logo">BLUEPRINT</div>
+      <small>Career school for field professionals</small>
+    </footer>
   </main>
-
-  <div class="sticky"><button class="cta">無料カウンセリングはこちら</button></div>
 </body>
 </html>
