@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BINGO</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #050510;
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* ===== 左カラム: スロット ===== */
+  .left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    padding: 40px;
+    border-right: 1px solid #1a1a2e;
+  }
+
+  h1 {
+    font-size: 2rem;
+    letter-spacing: 0.4em;
+    color: #7ec8f0;
+    font-weight: 900;
+  }
+
+  .slot-wrapper {
+    position: relative;
+    width: 340px;
+    height: 340px;
+  }
+
+  .slot-glow {
+    position: absolute;
+    inset: -30px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,179,237,0.18) 0%, transparent 70%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .slot-glow.active { opacity: 1; }
+
+  .slot-display {
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    border: 6px solid #3a6a9a;
+    background: radial-gradient(circle at 35% 35%, #0d1f33, #060e1a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9rem;
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+    color: #7ec8f0;
+    text-shadow: 0 0 50px rgba(126,200,240,1), 0 0 20px rgba(126,200,240,0.6);
+    user-select: none;
+    position: relative;
+    transition: border-color 0.3s, color 0.3s, text-shadow 0.3s;
+  }
+
+  .slot-display.spinning {
+    color: #2a5a7a;
+    text-shadow: none;
+  }
+  .slot-display.landed {
+    border-color: #7ec8f0;
+    animation: pulse-ring 0.7s ease-out;
+  }
+  .slot-display.prize-third  { border-color: #f0b800; color: #ffe033; text-shadow: 0 0 50px rgba(255,220,0,1), 0 0 20px rgba(255,220,0,0.6); }
+  .slot-display.prize-second { border-color: #d0d0d0; color: #ffffff; text-shadow: 0 0 50px rgba(255,255,255,1), 0 0 20px rgba(200,200,200,0.6); }
+  .slot-display.prize-first  { border-color: #ff4444; color: #ff8888; text-shadow: 0 0 60px rgba(255,60,60,1), 0 0 25px rgba(255,60,60,0.8); }
+
+  @keyframes pulse-ring {
+    0%   { box-shadow: 0 0 0 0   rgba(99,179,237,0.7); }
+    60%  { box-shadow: 0 0 0 28px rgba(99,179,237,0); }
+    100% { box-shadow: 0 0 0 0   rgba(99,179,237,0); }
+  }
+
+  .prize-label {
+    font-size: 1.8rem;
+    font-weight: bold;
+    letter-spacing: 0.12em;
+    min-height: 2.4rem;
+    text-align: center;
+  }
+  .prize-label.third  { color: #ffe033; }
+  .prize-label.second { color: #ffffff; }
+  .prize-label.first  { color: #ff6666; }
+
+  .btn-row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .btn-draw {
+    padding: 18px 64px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    letter-spacing: 0.12em;
+    background: linear-gradient(135deg, #1a4a7a, #2a6aac);
+    color: #fff;
+    border: 2px solid #7ec8f0;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-draw:hover:not(:disabled) {
+    background: linear-gradient(135deg, #2a6aac, #3a8acc);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 28px rgba(126,200,240,0.6);
+  }
+  .btn-draw:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+  .btn-reset {
+    padding: 10px 20px;
+    font-size: 0.85rem;
+    background: transparent;
+    color: #444;
+    border: 1px solid #2a2a3a;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-reset:hover { color: #777; border-color: #555; }
+
+  .finish-msg {
+    font-size: 1rem;
+    color: #666;
+    letter-spacing: 0.1em;
+    display: none;
+  }
+  .finish-msg.show { display: block; }
+
+  /* ===== 右カラム: 履歴 ===== */
+  .right {
+    display: flex;
+    flex-direction: column;
+    padding: 32px 28px;
+    gap: 16px;
+    overflow: hidden;
+  }
+
+  .history-title {
+    font-size: 1rem;
+    color: #444;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .history-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 10px;
+    align-content: start;
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 4px;
+  }
+  .history-grid::-webkit-scrollbar { width: 4px; }
+  .history-grid::-webkit-scrollbar-track { background: transparent; }
+  .history-grid::-webkit-scrollbar-thumb { background: #2a2a3a; border-radius: 2px; }
+
+  .history-chip {
+    aspect-ratio: 1;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+    background: #0d1f33;
+    color: #7ec8f0;
+    border: 2px solid #2a5a80;
+  }
+  .history-chip.prize-third  { background: #221800; color: #ffe033; border-color: #c09020; }
+  .history-chip.prize-second { background: #1e1e1e; color: #ffffff; border-color: #909090; }
+  .history-chip.prize-first  { background: #220a0a; color: #ff7777; border-color: #cc3333; }
+  .history-chip.new-chip     { animation: chip-pop 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+
+  @keyframes chip-pop {
+    from { transform: scale(0.4); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 左: スロット -->
+<div class="left">
+  <h1>B I N G O</h1>
+
+  <div class="slot-wrapper">
+    <div class="slot-glow" id="slotGlow"></div>
+    <div class="slot-display" id="slotDisplay">?</div>
+  </div>
+
+  <div class="prize-label" id="prizeLabel"></div>
+
+  <div class="btn-row">
+    <button class="btn-draw" id="btnDraw" onclick="draw()">引く</button>
+  </div>
+
+  <div class="finish-msg" id="finishMsg">— 終了 —</div>
+</div>
+
+<!-- 右: 出た番号 -->
+<div class="right">
+  <div class="history-title">出た番号</div>
+  <div class="history-grid" id="historyGrid"></div>
+</div>
+
+<script>
+const SEQUENCE = [
+  61,24,17,47,68,25,1,15,27,28,51,21,41,43,42,59,8,3,12,26,10,45,29,66,57,54,16,74,18,46,69,
+  19,
+  64,48,67,55,62,13,72,71,5,75,34,49,
+  7,
+  30,
+  63
+];
+
+const PRIZE_STEPS  = { 45: 'third', 46: 'second', 47: 'first' };
+const PRIZE_LABELS = { third: '🥉 3位確定', second: '🥈 2位確定', first: '🥇 1位確定！' };
+
+let currentStep = 0;
+let spinning = false;
+
+const slotDisplay = document.getElementById('slotDisplay');
+const slotGlow    = document.getElementById('slotGlow');
+const prizeLabel  = document.getElementById('prizeLabel');
+const btnDraw     = document.getElementById('btnDraw');
+const finishMsg   = document.getElementById('finishMsg');
+const historyGrid = document.getElementById('historyGrid');
+
+document.addEventListener('keydown', e => {
+  if ((e.code === 'Space' || e.code === 'Enter') && !btnDraw.disabled) {
+    e.preventDefault();
+    draw();
+  }
+});
+
+function draw() {
+  if (spinning || currentStep >= SEQUENCE.length) return;
+  spinning = true;
+  btnDraw.disabled = true;
+  prizeLabel.className = 'prize-label';
+  prizeLabel.textContent = '';
+  slotGlow.classList.remove('active');
+
+  const targetNum = SEQUENCE[currentStep];
+  const step = currentStep + 1;
+  const duration = 1200;
+  const interval = 60;
+  let elapsed = 0;
+
+  slotDisplay.className = 'slot-display spinning';
+
+  const timer = setInterval(() => {
+    elapsed += interval;
+    slotDisplay.textContent = Math.floor(Math.random() * 75) + 1;
+
+    if (elapsed >= duration) {
+      clearInterval(timer);
+      landNumber(targetNum, step);
+    } else if (elapsed >= duration * 0.7 && Math.random() < 0.3) {
+      slotDisplay.textContent = targetNum;
+    }
+  }, interval);
+}
+
+function landNumber(num, step) {
+  slotDisplay.textContent = num;
+  slotGlow.classList.add('active');
+
+  const prizeKey = PRIZE_STEPS[step];
+  if (prizeKey) {
+    slotDisplay.className = `slot-display landed prize-${prizeKey}`;
+    prizeLabel.className = `prize-label ${prizeKey}`;
+    prizeLabel.textContent = PRIZE_LABELS[prizeKey];
+  } else {
+    slotDisplay.className = 'slot-display landed';
+  }
+
+  // 履歴: 新しいものを先頭に
+  const chip = document.createElement('div');
+  chip.className = 'history-chip new-chip' + (prizeKey ? ` prize-${prizeKey}` : '');
+  chip.textContent = num;
+  historyGrid.prepend(chip);
+
+  currentStep++;
+
+  if (currentStep >= SEQUENCE.length) {
+    finishMsg.classList.add('show');
+  } else {
+    setTimeout(() => {
+      spinning = false;
+      btnDraw.disabled = false;
+    }, 600);
+  }
+  spinning = false;
+}
+
+function resetGame() {
+  if (!confirm('リセットしますか？')) return;
+  currentStep = 0;
+  spinning = false;
+  slotDisplay.textContent = '?';
+  slotDisplay.className = 'slot-display';
+  slotGlow.classList.remove('active');
+  prizeLabel.textContent = '';
+  prizeLabel.className = 'prize-label';
+  historyGrid.innerHTML = '';
+  btnDraw.disabled = false;
+  finishMsg.classList.remove('show');
+}
+</script>
+</body>
+</html>
