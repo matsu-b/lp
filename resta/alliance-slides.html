@@ -1108,49 +1108,302 @@
   <div class="slide">
     <div class="slide-content">
       <div class="slide-label">Return on Investment</div>
-      <h2 class="slide-heading">ROI<span>試算</span></h2>
-      <div class="grid-2" style="gap: 28px; margin-bottom: 24px;">
-        <div class="card glow-orange">
-          <div style="font-size: 13px; letter-spacing: 0.12em; color: var(--text-muted); margin-bottom: 16px;">INVESTMENT</div>
-          <table class="info-table">
-            <tr>
-              <td>研修費</td>
-              <td><span class="case-highlight">36万円/人・年</span>（従来比▲28%）</td>
-            </tr>
-            <tr>
-              <td>キャッシュ負担</td>
-              <td>助成金スキーム活用で実質負担をさらに軽減</td>
-            </tr>
-          </table>
+      <h2 class="slide-heading">ROI<span>シミュレーター</span></h2>
+
+      <!-- スライダー入力 -->
+      <div class="roi-inputs">
+        <div class="roi-input-row">
+          <label class="roi-label">派遣スタッフ数</label>
+          <div class="roi-slider-wrap">
+            <input type="range" id="roi-staff" min="10" max="300" step="10" value="100" class="roi-slider">
+            <span class="roi-val"><span id="roi-staff-val">100</span>名</span>
+          </div>
         </div>
-        <div class="card glow-teal">
-          <div style="font-size: 13px; letter-spacing: 0.12em; color: var(--accent-light); margin-bottom: 16px;">RETURN（年間）</div>
-          <table class="info-table">
-            <tr>
-              <td>スタッフ単価</td>
-              <td>未経験帯 → <span class="case-highlight">エンジニア帯へ移行</span></td>
-            </tr>
-            <tr>
-              <td>稼働率</td>
-              <td>空稼働月 → <span class="case-highlight">案件共同アサインで埋める</span></td>
-            </tr>
-            <tr>
-              <td>採用コスト</td>
-              <td>定着率改善 → <span class="case-highlight">採用費を削減</span></td>
-            </tr>
-            <tr>
-              <td>ブランド効果</td>
-              <td>応募単価・応募質の改善</td>
-            </tr>
-          </table>
+        <div class="roi-input-row">
+          <label class="roi-label">平均空稼働率（現状）</label>
+          <div class="roi-slider-wrap">
+            <input type="range" id="roi-vacancy" min="5" max="30" step="1" value="15" class="roi-slider">
+            <span class="roi-val"><span id="roi-vacancy-val">15</span>%</span>
+          </div>
+        </div>
+        <div class="roi-input-row">
+          <label class="roi-label">スタッフ平均月額単価（現状）</label>
+          <div class="roi-slider-wrap">
+            <input type="range" id="roi-price" min="20" max="60" step="1" value="30" class="roi-slider">
+            <span class="roi-val"><span id="roi-price-val">30</span>万円</span>
+          </div>
         </div>
       </div>
-      <div class="mission-box">
-        <div class="lead" style="font-size: clamp(20px, 2.2vw, 30px);">単年での投資回収が可能。2年目以降は純増。</div>
-        <div class="sub">御社のスタッフ構成に応じた個別試算をご提供します。</div>
+
+      <!-- 比較テーブル -->
+      <div class="roi-compare">
+        <div class="roi-col roi-col-before">
+          <div class="roi-col-head">一般的な派遣<br><span style="font-size:11px;font-weight:400;opacity:.7;">（現状維持）</span></div>
+          <div class="roi-metric">
+            <div class="roi-metric-label">年間空稼働損失</div>
+            <div class="roi-metric-val negative" id="b-vacancy">－</div>
+          </div>
+          <div class="roi-metric">
+            <div class="roi-metric-label">年間採用費（離職補充）</div>
+            <div class="roi-metric-val negative" id="b-recruit">－</div>
+          </div>
+          <div class="roi-metric">
+            <div class="roi-metric-label">研修費（外部委託）</div>
+            <div class="roi-metric-val negative" id="b-train">－</div>
+          </div>
+          <div class="roi-metric roi-total">
+            <div class="roi-metric-label">年間コスト合計</div>
+            <div class="roi-metric-val negative" id="b-total">－</div>
+          </div>
+        </div>
+        <div class="roi-vs">VS</div>
+        <div class="roi-col roi-col-after">
+          <div class="roi-col-head">Resta提携後<br><span style="font-size:11px;font-weight:400;opacity:.7;">（1年目）</span></div>
+          <div class="roi-metric">
+            <div class="roi-metric-label">空稼働損失（案件共同アサイン後）</div>
+            <div class="roi-metric-val positive" id="a-vacancy">－</div>
+          </div>
+          <div class="roi-metric">
+            <div class="roi-metric-label">採用費（定着率改善）</div>
+            <div class="roi-metric-val positive" id="a-recruit">－</div>
+          </div>
+          <div class="roi-metric">
+            <div class="roi-metric-label">研修費（Resta提供）</div>
+            <div class="roi-metric-val positive" id="a-train">－</div>
+          </div>
+          <div class="roi-metric roi-total">
+            <div class="roi-metric-label">年間コスト合計</div>
+            <div class="roi-metric-val positive" id="a-total">－</div>
+          </div>
+        </div>
       </div>
+
+      <!-- 差分ハイライト -->
+      <div class="roi-result-box">
+        <div class="roi-result-label">年間改善効果</div>
+        <div class="roi-result-val" id="roi-diff">－</div>
+        <div class="roi-result-sub" id="roi-roi">投資対効果を計算中...</div>
+      </div>
+
+      <div class="roi-note">※試算は業界平均値をベースにした概算です。実態に応じた個別試算をご提供します。</div>
     </div>
   </div>
+
+  <style>
+  .roi-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 16px 20px;
+  }
+  .roi-input-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .roi-label {
+    width: 200px;
+    font-size: 13px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+  .roi-slider-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+  }
+  .roi-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.15);
+    outline: none;
+    cursor: pointer;
+  }
+  .roi-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    cursor: pointer;
+  }
+  .roi-val {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent-light);
+    min-width: 70px;
+    text-align: right;
+  }
+  .roi-compare {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 16px;
+  }
+  .roi-col {
+    flex: 1;
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .roi-col-before {
+    background: rgba(239,68,68,0.07);
+    border: 1px solid rgba(239,68,68,0.2);
+  }
+  .roi-col-after {
+    background: rgba(45,212,191,0.07);
+    border: 1px solid rgba(45,212,191,0.2);
+  }
+  .roi-vs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 14px;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+  .roi-col-head {
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    line-height: 1.4;
+  }
+  .roi-metric {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    gap: 8px;
+  }
+  .roi-metric.roi-total {
+    border-bottom: none;
+    margin-top: 6px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+  }
+  .roi-metric-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    flex: 1;
+  }
+  .roi-metric-val {
+    font-size: 14px;
+    font-weight: 700;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .roi-metric-val.negative { color: #f87171; }
+  .roi-metric-val.positive { color: #34d399; }
+  .roi-total .roi-metric-val {
+    font-size: 16px;
+  }
+  .roi-result-box {
+    background: linear-gradient(135deg, rgba(251,146,60,0.15), rgba(45,212,191,0.15));
+    border: 1px solid rgba(251,146,60,0.3);
+    border-radius: 12px;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 10px;
+  }
+  .roi-result-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+  .roi-result-val {
+    font-size: clamp(22px, 2.8vw, 36px);
+    font-weight: 800;
+    color: var(--accent-orange);
+    white-space: nowrap;
+  }
+  .roi-result-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    flex: 1;
+    text-align: right;
+  }
+  .roi-note {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    text-align: right;
+  }
+  </style>
+
+  <script>
+  (function(){
+    function fmt(n) {
+      if (n >= 10000) return (n / 10000).toFixed(1) + '億円';
+      return Math.round(n / 10) * 10 + '万円';
+    }
+    function calc() {
+      var staff   = +document.getElementById('roi-staff').value;
+      var vacancy = +document.getElementById('roi-vacancy').value / 100;
+      var price   = +document.getElementById('roi-price').value; // 万円/月
+
+      // ── 一般派遣（現状）──
+      var bVacancy = Math.round(staff * vacancy * price * 12); // 万円
+      var bRecruit = Math.round(staff * 0.20 * 50);  // 離職率20%、採用費50万/人
+      var bTrain   = Math.round(staff * 0.30 * 15);  // 研修対象30%、外部研修15万/人
+      var bTotal   = bVacancy + bRecruit + bTrain;
+
+      // ── Resta提携後 ──
+      var aVacancyRate = vacancy * 0.35;  // 空稼働を65%削減
+      var aVacancy = Math.round(staff * aVacancyRate * price * 12);
+      var aRecruit = Math.round(staff * 0.12 * 50);  // 定着率改善→離職率12%へ
+      var aTrain   = Math.round(staff * 0.30 * 36);  // Resta研修費36万/人（助成金前）
+      var aTotal   = aVacancy + aRecruit + aTrain;
+
+      var diff = bTotal - aTotal;
+      var roi  = Math.round(diff / aTrain * 100);
+
+      document.getElementById('b-vacancy').textContent = '▲' + fmt(bVacancy);
+      document.getElementById('b-recruit').textContent = '▲' + fmt(bRecruit);
+      document.getElementById('b-train').textContent   = '▲' + fmt(bTrain);
+      document.getElementById('b-total').textContent   = '▲' + fmt(bTotal);
+
+      document.getElementById('a-vacancy').textContent = '▲' + fmt(aVacancy);
+      document.getElementById('a-recruit').textContent = '▲' + fmt(aRecruit);
+      document.getElementById('a-train').textContent   = '▲' + fmt(aTrain);
+      document.getElementById('a-total').textContent   = '▲' + fmt(aTotal);
+
+      document.getElementById('roi-diff').textContent = '+' + fmt(diff) + '/年';
+      document.getElementById('roi-roi').textContent  = '研修投資に対するROI：' + roi + '% ／ 投資回収期間の目安：' + (diff > 0 ? Math.ceil(aTrain / (diff/12)) + 'ヶ月' : '−');
+    }
+
+    function bind(id, valId) {
+      var el = document.getElementById(id);
+      el.addEventListener('input', function(){
+        document.getElementById(valId).textContent = el.value;
+        calc();
+      });
+    }
+    bind('roi-staff',   'roi-staff-val');
+    bind('roi-vacancy', 'roi-vacancy-val');
+    bind('roi-price',   'roi-price-val');
+
+    // 初期計算（DOMContentLoadedより後に実行されるよう遅延）
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', calc);
+    } else {
+      calc();
+    }
+  })();
+  </script>
 
   <!-- ═══ 9. データドリブン伴走 ═══ -->
   <div class="slide">
