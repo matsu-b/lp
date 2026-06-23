@@ -694,10 +694,18 @@ async function fetchSheetData(tabName) {
 }
 
 async function discoverPeriods() {
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent('設定')}&range=A1:A100`;
+  // 設定タブ: A列=評価期間(YYYY-MM), B列=公開設定。B列が「公開」の期間のみ表示する。
+  // （B列が空欄・「非公開」・その他はすべて非表示。デプロイ後はB列の変更だけで公開/非公開を切替可能）
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent('設定')}&range=A1:B100`;
   const resp = await fetch(url);
   const text = await resp.text();
-  return text.trim().split('\n').map(s => s.replace(/"/g, '').trim()).filter(s => s.match(/^\d{4}-\d{2}$/));
+  return text.trim().split('\n')
+    .map(line => {
+      const cells = line.split(',').map(c => c.replace(/^"|"$/g, '').trim());
+      return { period: cells[0] || '', status: cells[1] || '' };
+    })
+    .filter(r => /^\d{4}-\d{2}$/.test(r.period) && r.status === '公開')
+    .map(r => r.period);
 }
 
 // ============================================================
