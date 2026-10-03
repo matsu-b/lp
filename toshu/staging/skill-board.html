@@ -1110,8 +1110,9 @@ async function initApp() {
     }
 
     // Fetch first period to get worker names
-    await fetchSheetData(availablePeriods[0]);
+    const first = await fetchSheetData(availablePeriods[0]);
     if (epoch !== jobEpoch) return;
+    workerNames = first.workers; // キャッシュ済みでも職種ごとの名前一覧を入れ直す
     populateSelects();
     await onIndividualChange();
     const activeTab = document.querySelector('.tab-btn.active')?.dataset.tab;
